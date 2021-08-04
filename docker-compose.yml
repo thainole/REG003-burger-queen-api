@@ -9,12 +9,12 @@ services:
       MONGO_INITDB_ROOT_USERNAME: bq
       MONGO_INITDB_ROOT_PASSWORD: secret
     restart: always
+    networks:
+      - private
     expose:
       - "27017" # nuestra app corre en el puerto 8080
     ports:
       - "27017:27017" # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra maquina
-    networks:
-      - private
   # https://hub.docker.com/_/mongo
   # https://hub.docker.com/_/postgres
   # https://hub.docker.com/_/mysql
