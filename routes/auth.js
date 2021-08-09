@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
+/* const jwt = require('jsonwebtoken');
 const config = require('../config');
 
-const { secret } = config;
+const { secret } = config; */
 
 /** @module auth */
 module.exports = (app, nextMain) => {
@@ -25,6 +25,7 @@ module.exports = (app, nextMain) => {
     }
 
     // TODO: autenticar a la usuarix
+    resp.json({email})
     next();
   });
 
