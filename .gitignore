@@ -1,4 +1,4 @@
 node_modules/
-secrets.env
+.env
 docs
 package-lock.json
