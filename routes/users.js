@@ -4,11 +4,11 @@ const {
   requireAuth,
   requireAdmin,
 } = require('../middleware/auth');
+const User = require('../models/user');
 
 const {
-  getUsers,
+  getUsers, postAdminUser
 } = require('../controller/users');
-
 
 const initAdminUser = (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
@@ -22,10 +22,11 @@ const initAdminUser = (app, next) => {
     roles: { admin: true },
   };
 
+  postAdminUser(adminUser, next);
+
   // TODO: crear usuaria admin
   next();
 };
-
 
 /*
  * Diagrama de flujo de una aplicación y petición en node - express :
