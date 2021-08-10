@@ -24,6 +24,8 @@ const initAdminUser = (app, next) => {
 
   postAdminUser(adminUser, next);
 
+  postAdminUser(adminUser, next);
+
   // TODO: crear usuaria admin
   next();
 };
