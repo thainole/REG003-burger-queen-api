@@ -7,7 +7,7 @@ const {
 const User = require('../models/user');
 
 const {
-  getUsers,
+  getUsers, postAdminUser
 } = require('../controller/users');
 
 const initAdminUser = (app, next) => {
@@ -38,6 +38,8 @@ const initAdminUser = (app, next) => {
         console.info('Ha ocurrido un error', err);
       }
     });
+
+  postAdminUser(adminUser, next);
 
   // TODO: crear usuaria admin
   next();
