@@ -21,6 +21,8 @@ const postAdminUser = (adminUser, next ) => {
     });
 }
 
+/* Post Auth */
+
 module.exports = {
   getUsers: (req, resp, next) => {
   },
