@@ -1,4 +1,4 @@
-const { authUsers } = require('../controller/auth')
+const { authUsers } = require('../controller/auth');
 
 /** @module auth */
 module.exports = (app, nextMain) => {
@@ -14,7 +14,7 @@ module.exports = (app, nextMain) => {
    * @code {400} si no se proveen `email` o `password` o ninguno de los dos
    * @auth No requiere autenticación
    */
-  app.post('/auth', authUsers );
+  app.post('/auth', authUsers);
 
   return nextMain();
 };
