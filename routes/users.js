@@ -7,7 +7,7 @@ const {
 const User = require('../models/user');
 
 const {
-  getUsers, postAdminUser
+  getUsers, postAdminUser,
 } = require('../controller/users');
 
 const initAdminUser = (app, next) => {
