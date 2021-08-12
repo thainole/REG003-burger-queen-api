@@ -17,7 +17,7 @@ mongoose
     useUnifiedTopology: true,
   })
   // eslint-disable-next-line no-console
-  .then(console.log)
+  .then(() => console.info('Conected to DB'))
   .catch(console.error);
 
 app.set('config', config);

@@ -1,6 +1,7 @@
 const User = require('../models/user');
+const { isValidEmail } = require('../helpers/helper');
 
-/* Post admin User */
+// ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = (adminUser, next) => {
 
   const userFind = User.findOne({ email: adminUser.email });
@@ -23,40 +24,39 @@ const postAdminUser = (adminUser, next) => {
 };
 
 
-// CREANDO USUARIOS
+// ------------------OBTENIENDO USUARIOS-------------------------
+const getUsers = (req, resp, next) => {
+};
+
+
+// -------------------CREANDO USUARIOS---------------------------
 const postUsers = async (req, resp, next) => {
 
   const { email, password, roles } = req.body;
   const user = new User({ email, password, roles });
 
   // Verificamos si mandan correo y contraseña
-  if (user.email === '' || user.password === '') {
-    return next(400);
-  }
+  if (!email || !password) return next(400);
 
   // Verificamos si el email es válido
-  /* if (!user.email.isEmail()) {
-    return next(400);
-  } */
+  if (!isValidEmail(email)) return next(400);
+  
+  // Verificamos que la contraseña sea válida
+  if (password.length < 6) return next(400);
 
   // Verificamos si el correo existe
   const existingEmail = await User.findOne({ email });
-  if (existingEmail) {
-    return next(403);
-  }
+  if (existingEmail) return next(403);
 
   // Guardar en database
   await user.save();
-  resp.json({
-    user,
-  });
+  resp.json({ user });
 };
 
 
 
 module.exports = {
-  getUsers: (req, resp, next) => {
-  },
+  getUsers,
   postAdminUser,
   postUsers
 };
