@@ -8,6 +8,11 @@
   },
   "rules": {
     "no-underscore-dangle": "off",
+    "no-unused-vars": "off",
+    "no-trailing-spaces": "off",
+    "no-multiple-empty-lines": "off",
+    "comma-dangle": "off",
+    "padded-blocks": "off",
     "consistent-return": "off",
     "no-shadow": "off",
     "import/no-extraneous-dependencies": ["error", {"devDependencies": ["e2e/**/*.js", "**/*.spec.js"]}],

@@ -4,10 +4,10 @@ const {
   requireAuth,
   requireAdmin,
 } = require('../middleware/auth');
-const User = require('../models/user');
+// const User = require('../models/user');
 
 const {
-  getUsers, postAdminUser,
+  getUsers, postAdminUser, postUsers
 } = require('../controller/users');
 
 const initAdminUser = (app, next) => {
@@ -21,8 +21,6 @@ const initAdminUser = (app, next) => {
     password: bcrypt.hashSync(adminPassword, 10),
     roles: { admin: true },
   };
-
-  postAdminUser(adminUser, next);
 
   postAdminUser(adminUser, next);
 
@@ -119,8 +117,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si ya existe usuaria con ese `email`
    */
-  app.post('/users', requireAdmin, (req, resp, next) => {
-  });
+  app.post('/users', requireAdmin, postUsers);
 
   /**
    * @name PUT /users
