@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const { isValidEmail } = require('../helpers/helper');
+const bcrypt = require('bcrypt');
 
 // ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = (adminUser, next) => {
@@ -25,9 +26,26 @@ const postAdminUser = (adminUser, next) => {
 
 
 // ------------------OBTENIENDO USUARIOS-------------------------
-const getUsers = (req, resp, next) => {
-};
+const getUserId = async(req, resp, next) => {
 
+  try {
+    const {uid} = req.params;
+    const userId = await User.findById(uid);
+  
+    if(!userId){
+      return resp.status(404).json({
+        message: 'User Not Exist',
+      });
+    };
+  
+    resp.json({userId})
+
+  } catch (error) {
+      return resp.status(400).json({
+        message: 'Bad request',
+      });;
+  }
+};
 
 // -------------------CREANDO USUARIOS---------------------------
 const postUsers = async (req, resp, next) => {
@@ -48,6 +66,9 @@ const postUsers = async (req, resp, next) => {
   const existingEmail = await User.findOne({ email });
   if (existingEmail) return next(403);
 
+  // Encriptando contraseña
+    user.password = bcrypt.hashSync(password, 10);
+
   // Guardar en database
   await user.save();
   resp.json({ user });
@@ -56,7 +77,8 @@ const postUsers = async (req, resp, next) => {
 
 
 module.exports = {
-  getUsers,
+  //getUsers,
   postAdminUser,
-  postUsers
+  postUsers,
+  getUserId
 };
