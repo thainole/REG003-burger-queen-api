@@ -26,11 +26,14 @@ const postAdminUser = (adminUser, next) => {
     });
 };
 
-
 // ------------------OBTENIENDO USUARIOS-------------------------
 const getUsers = async (req, resp, next) => {
+
+  const {limit = 10} = req.query;
   try {
-    const users = await User.find();
+    const users = await User.find()
+      .limit(Number(limit))
+
     if (!users) {
       return next(404);
     }
@@ -39,7 +42,6 @@ const getUsers = async (req, resp, next) => {
     return next(400);
   }
 };
-
 
 // ------------------OBTENIENDO USUARIOS BY ID-------------------------
 const getUserId = async (req, resp, next) => {
@@ -57,7 +59,6 @@ const getUserId = async (req, resp, next) => {
     return next(400);
   }
 };
-
 
 // -------------------CREANDO USUARIOS---------------------------
 const postUsers = async (req, resp, next) => {
@@ -87,8 +88,7 @@ const postUsers = async (req, resp, next) => {
   resp.json(user);
 };
 
-
-// ------------------DELETE  USUARIOS-------------------------
+// ------------------DELETE USUARIOS-------------------------
 const deleteUser = async (req, resp, next) => {
 
   try {
@@ -106,8 +106,7 @@ const deleteUser = async (req, resp, next) => {
   }
 };
 
-
-// ------------------PUT  USUARIOS-------------------------
+// ------------------PUT USUARIOS-------------------------
 const updateUser = async (req, resp, next) => {
   try {
     const { email, password, roles } = req.body;
@@ -119,13 +118,19 @@ const updateUser = async (req, resp, next) => {
     if (!isValidEmail(email)) return next(400);
 
     if (password.length < 6) return next(400);
+
     if (password) {
+      
       const salt = bcrypt.genSaltSync();
       user.password = bcrypt.hashSync(password, salt);
     }
+
     const userUpdate = await User.findByIdAndUpdate(uid, user);
+
     if (!userUpdate) return next(403);
+
     resp.json(userUpdate);
+
   } catch (error) {
     return next(400);
   }
