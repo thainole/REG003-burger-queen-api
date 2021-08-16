@@ -1,15 +1,18 @@
 const bcrypt = require('bcrypt');
 
-const {
-  requireAuth,
-  requireAdmin,
-} = require('../middleware/auth');
-// const User = require('../models/user');
+const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 const {
-  getUsers, postAdminUser, postUsers
+  getUserId,
+  postAdminUser,
+  postUsers,
+  getUsers,
+  deleteUser,
+  updateUser
 } = require('../controller/users');
 
+
+// -----------------CREANDO USUARIO INICIAL-------------------------
 const initAdminUser = (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {
@@ -24,7 +27,6 @@ const initAdminUser = (app, next) => {
 
   postAdminUser(adminUser, next);
 
-  // TODO: crear usuaria admin
   next();
 };
 
@@ -95,8 +97,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, (req, resp) => {
-  });
+  app.get('/users/:uid', requireAuth, getUserId);
 
   /**
    * @name POST /users
@@ -117,7 +118,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si ya existe usuaria con ese `email`
    */
-  app.post('/users', requireAdmin, postUsers);
+  app.post('/users', [requireAuth, requireAdmin], postUsers);
 
   /**
    * @name PUT /users
@@ -141,8 +142,7 @@ module.exports = (app, next) => {
    * @code {403} una usuaria no admin intenta de modificar sus `roles`
    * @code {404} si la usuaria solicitada no existe
    */
-  app.put('/users/:uid', requireAuth, (req, resp, next) => {
-  });
+  app.put('/users/:uid', [requireAuth, requireAdmin], updateUser);
 
   /**
    * @name DELETE /users
@@ -160,8 +160,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.delete('/users/:uid', requireAuth, (req, resp, next) => {
-  });
+  app.delete('/users/:uid', [requireAuth, requireAdmin], deleteUser);
 
   initAdminUser(app, next);
 };

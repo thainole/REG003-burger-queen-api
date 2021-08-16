@@ -1,5 +1,8 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
+
 const { isValidEmail } = require('../helpers/helper');
+
 
 // ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = (adminUser, next) => {
@@ -25,7 +28,34 @@ const postAdminUser = (adminUser, next) => {
 
 
 // ------------------OBTENIENDO USUARIOS-------------------------
-const getUsers = (req, resp, next) => {
+const getUsers = async (req, resp, next) => {
+  try {
+    const users = await User.find();
+    if (!users) {
+      return next(404);
+    }
+    resp.json(users);
+  } catch (error) {
+    return next(400);
+  }
+};
+
+
+// ------------------OBTENIENDO USUARIOS BY ID-------------------------
+const getUserId = async (req, resp, next) => {
+
+  try {
+    const { uid } = req.params;
+    const userId = await User.findById(uid);
+
+    if (!userId) {
+      return next(404);
+    }
+    resp.json(userId);
+
+  } catch (error) {
+    return next(400);
+  }
 };
 
 
@@ -48,15 +78,66 @@ const postUsers = async (req, resp, next) => {
   const existingEmail = await User.findOne({ email });
   if (existingEmail) return next(403);
 
+  // Encriptando contraseña
+  const salt = bcrypt.genSaltSync();
+  user.password = bcrypt.hashSync(password, salt);
+
   // Guardar en database
   await user.save();
-  resp.json({ user });
+  resp.json(user);
 };
 
+
+// ------------------DELETE  USUARIOS-------------------------
+const deleteUser = async (req, resp, next) => {
+
+  try {
+    const { uid } = req.params;
+    const userId = await User.findByIdAndDelete(uid);
+
+    if (!userId) {
+      return next(404);
+    }
+
+    resp.json(userId);
+
+  } catch (error) {
+    return next(400);
+  }
+};
+
+
+// ------------------PUT  USUARIOS-------------------------
+const updateUser = async (req, resp, next) => {
+  try {
+    const { email, password, roles } = req.body;
+    const { uid } = req.params;
+    const user = { email, password, roles };
+
+    if (!email || !password) return next(400);
+
+    if (!isValidEmail(email)) return next(400);
+
+    if (password.length < 6) return next(400);
+    if (password) {
+      const salt = bcrypt.genSaltSync();
+      user.password = bcrypt.hashSync(password, salt);
+    }
+    const userUpdate = await User.findByIdAndUpdate(uid, user);
+    if (!userUpdate) return next(403);
+    resp.json(userUpdate);
+  } catch (error) {
+    return next(400);
+  }
+
+};
 
 
 module.exports = {
   getUsers,
   postAdminUser,
-  postUsers
+  postUsers,
+  getUserId,
+  deleteUser,
+  updateUser,
 };
