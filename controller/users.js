@@ -26,7 +26,6 @@ const postAdminUser = (adminUser, next) => {
     });
 };
 
-
 // ------------------OBTENIENDO USUARIOS-------------------------
 const getUsers = async (req, resp, next) => {
   try {
@@ -136,7 +135,7 @@ const updateUser = async (req, resp, next) => {
 
 
 module.exports = {
-  getUsers,
+  //getUsers,
   postAdminUser,
   postUsers,
   getUserId,
