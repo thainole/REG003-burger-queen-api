@@ -1,9 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const productSchema = new Schema({
-  _id: {
-    type: Number,
-  },
+  
   name: {
     type: String,
     required: true,
@@ -24,4 +22,11 @@ const productSchema = new Schema({
 
 });
 
-module.exports = model('product', productSchema);
+// eslint-disable-next-line func-names
+productSchema.methods.toJSON = function () {
+  const { __v, ...product } = this.toObject();
+  return product;
+};
+
+
+module.exports = model('Product', productSchema);

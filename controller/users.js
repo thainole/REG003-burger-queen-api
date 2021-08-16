@@ -46,12 +46,12 @@ const getUserId = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-    const userId = await User.findById(uid);
+    const userById = await User.findById(uid);
 
-    if (!userId) {
+    if (!userById) {
       return next(404);
     }
-    resp.json(userId);
+    resp.json(userById);
 
   } catch (error) {
     return next(400);
@@ -93,13 +93,13 @@ const deleteUser = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-    const userId = await User.findByIdAndDelete(uid);
+    const userById = await User.findByIdAndDelete(uid);
 
-    if (!userId) {
+    if (!userById) {
       return next(404);
     }
 
-    resp.json(userId);
+    resp.json(userById);
 
   } catch (error) {
     return next(400);
