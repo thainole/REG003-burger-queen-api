@@ -86,6 +86,7 @@ const postUsers = async (req, resp, next) => {
   await user.save();
   resp.json(user);
 };
+
 // ------------------DELETE USUARIOS-------------------------
 const deleteUser = async (req, resp, next) => {
 
