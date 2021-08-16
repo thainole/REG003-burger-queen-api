@@ -81,7 +81,7 @@ const postUsers = async (req, resp, next) => {
   await user.save();
   resp.json(user);
 };
-// ------------------DELETE  USUARIOS-------------------------
+// ------------------DELETE USUARIOS-------------------------
 const deleteUser = async (req, resp, next) => {
 
   try {
@@ -98,7 +98,7 @@ const deleteUser = async (req, resp, next) => {
     return next(400);
   }
 };
-// ------------------PUT  USUARIOS-------------------------
+// ------------------PUT USUARIOS-------------------------
 const updateUser = async (req, resp, next) => {
   try {
     const { email, password, roles } = req.body;
