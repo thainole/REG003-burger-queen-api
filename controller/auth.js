@@ -5,7 +5,7 @@ const Usuario = require('../models/user');
 
 const { secret } = config;
 
-// TODO: autenticar a la usuarix
+// DONE: autenticar a la usuarix
 
 module.exports.authUsers = async (req, resp, next) => {
   const { email, password } = req.body;
@@ -15,7 +15,6 @@ module.exports.authUsers = async (req, resp, next) => {
   }
 
   const validUsuario = await Usuario.findOne({ email });
-  /*  console.log(validUsuario); */
 
   if (!validUsuario) {
     return resp.status(400).json({

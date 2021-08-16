@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+
 const { isValidEmail } = require('../helpers/helper');
+
 
 // ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = (adminUser, next) => {
@@ -24,8 +26,8 @@ const postAdminUser = (adminUser, next) => {
     });
 };
 
-// ------------------OBTENIENDO USUARIOS-------------------------
 
+// ------------------OBTENIENDO USUARIOS-------------------------
 const getUsers = async (req, resp, next) => {
   try {
     const users = await User.find();
@@ -37,6 +39,8 @@ const getUsers = async (req, resp, next) => {
     return next(400);
   }
 };
+
+
 // ------------------OBTENIENDO USUARIOS BY ID-------------------------
 const getUserId = async (req, resp, next) => {
 
@@ -54,6 +58,7 @@ const getUserId = async (req, resp, next) => {
   }
 };
 
+
 // -------------------CREANDO USUARIOS---------------------------
 const postUsers = async (req, resp, next) => {
 
@@ -65,7 +70,7 @@ const postUsers = async (req, resp, next) => {
 
   // Verificamos si el email es válido
   if (!isValidEmail(email)) return next(400);
-
+  
   // Verificamos que la contraseña sea válida
   if (password.length < 6) return next(400);
 
@@ -81,6 +86,8 @@ const postUsers = async (req, resp, next) => {
   await user.save();
   resp.json(user);
 };
+
+
 // ------------------DELETE  USUARIOS-------------------------
 const deleteUser = async (req, resp, next) => {
 
@@ -98,6 +105,8 @@ const deleteUser = async (req, resp, next) => {
     return next(400);
   }
 };
+
+
 // ------------------PUT  USUARIOS-------------------------
 const updateUser = async (req, resp, next) => {
   try {

@@ -1,10 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const {
-  requireAuth,
-  requireAdmin,
-} = require('../middleware/auth');
-// const User = require('../models/user');
+const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 const {
   getUserId,
@@ -15,6 +11,8 @@ const {
   updateUser
 } = require('../controller/users');
 
+
+// -----------------CREANDO USUARIO INICIAL-------------------------
 const initAdminUser = (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
   if (!adminEmail || !adminPassword) {
@@ -29,7 +27,6 @@ const initAdminUser = (app, next) => {
 
   postAdminUser(adminUser, next);
 
-  // TODO: crear usuaria admin
   next();
 };
 

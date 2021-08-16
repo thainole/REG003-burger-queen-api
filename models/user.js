@@ -20,9 +20,12 @@ const userSchema = new Schema({
   },
 
 });
+
 // eslint-disable-next-line func-names
 userSchema.methods.toJSON = function () {
   const { __v, password, ...user } = this.toObject();
   return user;
 };
+
+
 module.exports = model('User', userSchema);
