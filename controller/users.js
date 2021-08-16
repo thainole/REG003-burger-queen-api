@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { isValidEmail } = require('../helpers/helper');
+const bcrypt = require('bcrypt');
 
 // ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = (adminUser, next) => {
@@ -125,7 +126,7 @@ const updateUser = async (req, resp, next) => {
 
 
 module.exports = {
-  getUsers,
+  //getUsers,
   postAdminUser,
   postUsers,
   getUserId,
