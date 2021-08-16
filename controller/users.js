@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 const { isValidEmail } = require('../helpers/helper');
+const bcrypt = require('bcrypt');
 
 
 // ---------------------CREANDO ADMIN---------------------------
@@ -57,7 +58,6 @@ const getUserId = async (req, resp, next) => {
     return next(400);
   }
 };
-
 
 // -------------------CREANDO USUARIOS---------------------------
 const postUsers = async (req, resp, next) => {
@@ -137,7 +137,7 @@ const updateUser = async (req, resp, next) => {
 
 
 module.exports = {
-  getUsers,
+  //getUsers,
   postAdminUser,
   postUsers,
   getUserId,
