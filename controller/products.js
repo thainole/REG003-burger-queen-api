@@ -1,23 +1,40 @@
 const Product = require('../models/product');
 
 // ------------------OBTENIENDO PRODUCTOS-------------------------
-/* const getProducts = async (req, resp, next) => {
+const getProducts = async (req, resp, next) => {
+
+  const {limit = 10} = req.query;
+
   try {
-    
+    const products = await Product.find()
+      .limit(Number(limit))
+
+    if (!products) {
+      return next(404);
+    }
+    resp.json(products);
   } catch (error) {
-    
+    return next(400)
   }
-}; */
+};
 
 
 // ------------------OBTENIENDO PRODUCTOS POR ID-------------------------
-/* const getProductById = async (req, resp, next) => {
+const getProductById = async (req, resp, next) => {
+
   try {
-    
+    const { productId } = req.params;
+    const productById = await Product.findById(productId);
+
+    if (!productById) {
+      return next(404);
+    }
+    resp.json(productById);
+
   } catch (error) {
-    
+    return next(400);
   }
-}; */
+};
 
 
 // -------------------CREANDO PRODUCTOS---------------------------
@@ -54,20 +71,51 @@ const deleteProduct = async (req, resp, next) => {
 
 
 // -------------------EDITANDO PRODUCTOS--------------------------
-/* const updateProduct = async (req, resp, next) => {
+const updateProduct = async (req, resp, next) => {
+  
   try {
+    const {name, price, image, type } = req.body;
+    const { productId } = req.params;
+    // const product = {name, price, image, type}
+    
+    const productById = await Product.findById(productId);
+
+    if( !name || !price ) return next(400);
+
+    if(!productById) return next(404);
+
+    if(productById.name === name && productById.price === price && productById.image === image && productById.type === type){
+      return next(400);
+    }
+
+    if(name){
+      productById.name = name
+    }
+    if(price){
+      productById.price = price
+    }
+    if(image){
+      productById.image = image
+    }
+    if(type){
+      productById.type = type
+    }
+
+    const {_id, __v, dateEntry, ...product} = productById;
+    const productUpdate = await Product.findByIdAndUpdate(productId, product)
+
+    resp.json(productUpdate)
     
   } catch (error) {
-    
+    return next(400);
   }
-}; */
+};
 
 
 module.exports = {
-  /* getProducts,
-  getProductById, */
+  getProducts,
+  getProductById, 
   postProduct,
-  deleteProduct
-  /* deleteProduct,
-  updateProduct, */
+  deleteProduct,
+  updateProduct,
 };

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 const { isValidEmail } = require('../helpers/helper');
-const bcrypt = require('bcrypt');
+
 
 // ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = (adminUser, next) => {
@@ -28,8 +28,12 @@ const postAdminUser = (adminUser, next) => {
 
 // ------------------OBTENIENDO USUARIOS-------------------------
 const getUsers = async (req, resp, next) => {
+
+  const {limit = 10} = req.query;
   try {
-    const users = await User.find();
+    const users = await User.find()
+      .limit(Number(limit))
+
     if (!users) {
       return next(404);
     }
@@ -135,7 +139,7 @@ const updateUser = async (req, resp, next) => {
 
 
 module.exports = {
-  //getUsers,
+  getUsers,
   postAdminUser,
   postUsers,
   getUserId,
