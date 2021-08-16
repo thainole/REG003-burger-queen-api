@@ -4,7 +4,6 @@ const User = require('../models/user');
 const { isValidEmail } = require('../helpers/helper');
 const bcrypt = require('bcrypt');
 
-
 // ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = (adminUser, next) => {
 
@@ -27,7 +26,6 @@ const postAdminUser = (adminUser, next) => {
     });
 };
 
-
 // ------------------OBTENIENDO USUARIOS-------------------------
 const getUsers = async (req, resp, next) => {
   try {
@@ -40,7 +38,6 @@ const getUsers = async (req, resp, next) => {
     return next(400);
   }
 };
-
 
 // ------------------OBTENIENDO USUARIOS BY ID-------------------------
 const getUserId = async (req, resp, next) => {
@@ -86,6 +83,7 @@ const postUsers = async (req, resp, next) => {
   await user.save();
   resp.json(user);
 };
+
 // ------------------DELETE USUARIOS-------------------------
 const deleteUser = async (req, resp, next) => {
 

@@ -1,5 +1,2 @@
-<<<<<<< HEAD
 {"mongoUri":"mongodb://127.0.0.1:35757/"}
-=======
-{"mongoUri":"mongodb://127.0.0.1:35843/"}
->>>>>>> Feat get user by id
+
