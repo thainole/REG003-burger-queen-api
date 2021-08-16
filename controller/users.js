@@ -86,9 +86,7 @@ const postUsers = async (req, resp, next) => {
   await user.save();
   resp.json(user);
 };
-
-
-// ------------------DELETE  USUARIOS-------------------------
+// ------------------DELETE USUARIOS-------------------------
 const deleteUser = async (req, resp, next) => {
 
   try {
@@ -106,8 +104,7 @@ const deleteUser = async (req, resp, next) => {
   }
 };
 
-
-// ------------------PUT  USUARIOS-------------------------
+// ------------------PUT USUARIOS-------------------------
 const updateUser = async (req, resp, next) => {
   try {
     const { email, password, roles } = req.body;
@@ -119,13 +116,19 @@ const updateUser = async (req, resp, next) => {
     if (!isValidEmail(email)) return next(400);
 
     if (password.length < 6) return next(400);
+
     if (password) {
+      
       const salt = bcrypt.genSaltSync();
       user.password = bcrypt.hashSync(password, salt);
     }
+
     const userUpdate = await User.findByIdAndUpdate(uid, user);
+
     if (!userUpdate) return next(403);
+
     resp.json(userUpdate);
+
   } catch (error) {
     return next(400);
   }
