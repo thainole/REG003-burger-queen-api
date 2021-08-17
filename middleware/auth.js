@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 const jwt = require('jsonwebtoken');
 
 const Usuario = require('../models/user');
@@ -41,17 +42,28 @@ module.exports.isAuthenticated = (req) => (!!req.authToken);
 // DONE: decidir por la informacion del request si la usuaria es admin
 module.exports.isAdmin = (req) => (!!req.authToken.roles.admin);
 
+// module.exports.getUidWithtoken = (req) => console.log(req.authToken.uid);
+
+
 module.exports.requireAuth = (req, resp, next) => (
   (!module.exports.isAuthenticated(req))
     ? next(401)
     : next()
 );
+  
+module.exports.requireUser = (req, resp, next) => (
+  (!module.exports.isAuthenticated(req))
+    ? next(401)
+    : (req.params.uid !== req.authToken.uid && !req.authToken.roles.admin)
+      ? next(403)
+      : next()
+);
 
 module.exports.requireAdmin = (req, resp, next) => (
-  // eslint-disable-next-line no-nested-ternary
   (!module.exports.isAuthenticated(req))
     ? next(401)
     : (!module.exports.isAdmin(req))
       ? next(403)
       : next()
 );
+    
