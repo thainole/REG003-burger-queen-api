@@ -48,17 +48,19 @@ const getUserId = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-    const userById = await User.findById(uid);
+    let userById = isValidEmail(uid) ? await User.findOne({email:uid}) : await User.findById(uid)
 
     if (!userById) {
       return next(404);
     }
+
     resp.json(userById);
 
   } catch (error) {
     return next(400);
   }
 };
+
 
 // -------------------CREANDO USUARIOS---------------------------
 const postUsers = async (req, resp, next) => {
@@ -73,7 +75,7 @@ const postUsers = async (req, resp, next) => {
   if (!isValidEmail(email)) return next(400);
   
   // Verificamos que la contraseña sea válida
-  if (password.length < 6) return next(400);
+  if (password.length < 4) return next(400);
 
   // Verificamos si el correo existe
   const existingEmail = await User.findOne({ email });
@@ -92,8 +94,9 @@ const postUsers = async (req, resp, next) => {
 const deleteUser = async (req, resp, next) => {
 
   try {
+
     const { uid } = req.params;
-    const userById = await User.findByIdAndDelete(uid);
+    let userById = isValidEmail(uid) ? await User.findOneAndDelete({email:uid}) : await User.findByIdAndDelete(uid);
 
     if (!userById) {
       return next(404);
