@@ -29,8 +29,12 @@ const postAdminUser = (adminUser, next) => {
 
 // ------------------OBTENIENDO USUARIOS-------------------------
 const getUsers = async (req, resp, next) => {
+
+  const { limit = 10 } = req.query;
   try {
-    const users = await User.find();
+    const users = await User.find()
+      .limit(Number(limit));
+
     if (!users) {
       return next(404);
     }
@@ -46,7 +50,9 @@ const getUserId = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-    const userById = await User.findById(uid);
+    const userById = isValidEmail(uid) 
+      ? await User.findOne({ email: uid }) 
+      : await User.findById(uid);
 
     if (!userById) {
       return next(404);
@@ -72,7 +78,7 @@ const postUsers = async (req, resp, next) => {
   if (!isValidEmail(email)) return next(400);
   
   // Verificamos que la contraseña sea válida
-  if (password.length < 6) return next(400);
+  if (password.length < 4) return next(400);
 
   // Verificamos si el correo existe
   const existingEmail = await User.findOne({ email });
@@ -88,12 +94,15 @@ const postUsers = async (req, resp, next) => {
 };
 
 
-// ------------------DELETE  USUARIOS-------------------------
+// ------------------DELETE USUARIOS-------------------------
 const deleteUser = async (req, resp, next) => {
 
   try {
+
     const { uid } = req.params;
-    const userById = await User.findByIdAndDelete(uid);
+    const userById = isValidEmail(uid) 
+      ? await User.findOneAndDelete({ email: uid }) 
+      : await User.findByIdAndDelete(uid);
 
     if (!userById) {
       return next(404);
@@ -107,7 +116,7 @@ const deleteUser = async (req, resp, next) => {
 };
 
 
-// ------------------PUT  USUARIOS-------------------------
+// ------------------PUT USUARIOS-------------------------
 const updateUser = async (req, resp, next) => {
   try {
     const { email, password, roles } = req.body;
@@ -119,13 +128,19 @@ const updateUser = async (req, resp, next) => {
     if (!isValidEmail(email)) return next(400);
 
     if (password.length < 6) return next(400);
+
     if (password) {
+      
       const salt = bcrypt.genSaltSync();
       user.password = bcrypt.hashSync(password, salt);
     }
+
     const userUpdate = await User.findByIdAndUpdate(uid, user);
+
     if (!userUpdate) return next(403);
+
     resp.json(userUpdate);
+
   } catch (error) {
     return next(400);
   }

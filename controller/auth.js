@@ -17,9 +17,7 @@ module.exports.authUsers = async (req, resp, next) => {
   const validUsuario = await Usuario.findOne({ email });
 
   if (!validUsuario) {
-    return resp.status(400).json({
-      message: 'User Not Exist',
-    });
+    return next(404);
   }
 
   const validPassword = bcrypt.compareSync(password, validUsuario.password);

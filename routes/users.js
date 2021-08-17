@@ -97,7 +97,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireAuth, getUserId);
+  app.get('/users/:uid', requireAdmin, getUserId);
 
   /**
    * @name POST /users
@@ -118,7 +118,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si ya existe usuaria con ese `email`
    */
-  app.post('/users', [requireAuth, requireAdmin], postUsers);
+  app.post('/users', requireAdmin, postUsers);
 
   /**
    * @name PUT /users
