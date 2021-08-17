@@ -54,7 +54,7 @@ module.exports.requireAuth = (req, resp, next) => (
 module.exports.requireUser = (req, resp, next) => (
   (!module.exports.isAuthenticated(req))
     ? next(401)
-    : (req.params.uid !== req.authToken.uid && !req.authToken.roles.admin)
+    : (!req.authToken.roles.admin && req.params.uid !== req.authToken.uid && req.params.uid !== req.authToken.email)
       ? next(403)
       : next()
 );
