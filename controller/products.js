@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const { isValidMongoId } = require('../helpers/helper');
+
 
 // ------------------OBTENIENDO PRODUCTOS-------------------------
 const getProducts = async (req, resp, next) => {
@@ -14,6 +14,7 @@ const getProducts = async (req, resp, next) => {
       return next(404);
     }
     resp.json(products);
+
   } catch (error) {
     return next(400);
   }
@@ -26,13 +27,12 @@ const getProductById = async (req, resp, next) => {
   try {
     const { productId } = req.params;
 
-    if (!isValidMongoId(productId)) return next(404);
-
     const productById = await Product.findById(productId);
 
     if (!productById) {
       return next(404);
     }
+
     resp.json(productById);
 
   } catch (error) {
@@ -44,16 +44,23 @@ const getProductById = async (req, resp, next) => {
 // -------------------CREANDO PRODUCTOS---------------------------
 const postProduct = async (req, resp, next) => {
 
-  const { name, price, image, type } = req.body;
-  const product = new Product({ name, price, image, type });
-
-  if (!name || !price) return next(400);
-
-  product.dateEntry = new Date();
+  try {
+    const { name, price, image, type } = req.body;
+    const product = new Product({ name, price, image, type });
   
-  // Guardar en database
-  await product.save();
-  resp.json(product);
+    if (!name || !price) return next(400);
+  
+    product.dateEntry = new Date();
+    
+    // Guardar en database
+    await product.save();
+    resp.json(product);
+
+  } catch (error) {
+    return next(400);
+  }
+
+
 };
 
 
@@ -62,8 +69,6 @@ const deleteProduct = async (req, resp, next) => {
   try {
     const { productId } = req.params;
 
-    if (!isValidMongoId(productId)) return next(404);
-
     const productById = await Product.findByIdAndDelete(productId);
 
     if (!productById) {
@@ -71,6 +76,7 @@ const deleteProduct = async (req, resp, next) => {
     }
 
     resp.json(productById);
+
   } catch (error) {
     return next(400);
   }
@@ -79,21 +85,19 @@ const deleteProduct = async (req, resp, next) => {
 
 // -------------------EDITANDO PRODUCTOS--------------------------
 const updateProduct = async (req, resp, next) => {
-  
   try {
-    const { productId } = req.params;
-    // const product = {name, price, image, type}
-    if (!isValidMongoId(productId)) return next(404);
-    
-    const productById = await Product.findById(productId);
-    
-    const { name, price, image, type } = req.body;
 
-    if (!name || !price) return next(400);
+    const { name, price, image, type } = req.body;
+    const { productId } = req.params;
+
+    const productById = await Product.findById(productId);
 
     if (!productById) return next(404);
 
-    if (productById.name === name && productById.price === price 
+    if (typeof (price) !== 'number') return next(400);
+
+
+    if (productById.name === name && productById.price === price
       && productById.image === image && productById.type === type) {
       return next(400);
     }
@@ -111,15 +115,15 @@ const updateProduct = async (req, resp, next) => {
       productById.type = type;
     }
 
-    const { _id, __v, dateEntry, ...product } = productById;
-    const productUpdate = await Product.findByIdAndUpdate(productId, product);
+    // Actualizando datos
+    await Product.findByIdAndUpdate(productId, productById);
+    resp.json(productById);
 
-    resp.json(productUpdate);
-    
   } catch (error) {
     return next(400);
   }
 };
+
 
 
 module.exports = {

@@ -1,4 +1,5 @@
 const { requireAuth, requireAdmin } = require('../middleware/auth');
+const { validProductId } = require('../middleware/products');
 const { 
   postProduct,
   deleteProduct,
@@ -50,7 +51,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si el producto con `productId` indicado no existe
    */
-  app.get('/products/:productId', requireAuth, getProductById);
+  app.get('/products/:productId', [requireAuth, validProductId], getProductById);
 
   /**
    * @name POST /products
@@ -100,7 +101,7 @@ module.exports = (app, nextMain) => {
    * @code {403} si no es admin
    * @code {404} si el producto con `productId` indicado no existe
    */
-  app.put('/products/:productId', requireAdmin, updateProduct);
+  app.put('/products/:productId', [requireAdmin, validProductId], updateProduct);
 
   /**
    * @name DELETE /products
@@ -120,7 +121,7 @@ module.exports = (app, nextMain) => {
    * @code {403} si no es ni admin
    * @code {404} si el producto con `productId` indicado no existe
    */
-  app.delete('/products/:productId', requireAdmin, deleteProduct);
+  app.delete('/products/:productId', [requireAdmin, validProductId], deleteProduct);
 
   nextMain();
 };
