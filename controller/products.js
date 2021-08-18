@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const { isValidMongoId } = require('../helpers/helper');
 
 // ------------------OBTENIENDO PRODUCTOS-------------------------
 const getProducts = async (req, resp, next) => {
@@ -24,6 +25,9 @@ const getProductById = async (req, resp, next) => {
 
   try {
     const { productId } = req.params;
+
+    if (!isValidMongoId(productId)) return next(404);
+
     const productById = await Product.findById(productId);
 
     if (!productById) {
@@ -57,6 +61,9 @@ const postProduct = async (req, resp, next) => {
 const deleteProduct = async (req, resp, next) => {
   try {
     const { productId } = req.params;
+
+    if (!isValidMongoId(productId)) return next(404);
+
     const productById = await Product.findByIdAndDelete(productId);
 
     if (!productById) {
@@ -74,11 +81,13 @@ const deleteProduct = async (req, resp, next) => {
 const updateProduct = async (req, resp, next) => {
   
   try {
-    const { name, price, image, type } = req.body;
     const { productId } = req.params;
     // const product = {name, price, image, type}
+    if (!isValidMongoId(productId)) return next(404);
     
     const productById = await Product.findById(productId);
+    
+    const { name, price, image, type } = req.body;
 
     if (!name || !price) return next(400);
 
