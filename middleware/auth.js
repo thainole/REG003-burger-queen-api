@@ -42,9 +42,6 @@ module.exports.isAuthenticated = (req) => (!!req.authToken);
 // DONE: decidir por la informacion del request si la usuaria es admin
 module.exports.isAdmin = (req) => (!!req.authToken.roles.admin);
 
-// module.exports.getUidWithtoken = (req) => console.log(req.authToken.uid);
-
-
 module.exports.requireAuth = (req, resp, next) => (
   (!module.exports.isAuthenticated(req))
     ? next(401)
@@ -66,4 +63,3 @@ module.exports.requireAdmin = (req, resp, next) => (
       ? next(403)
       : next()
 );
-    

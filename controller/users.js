@@ -69,29 +69,30 @@ const getUserId = async (req, resp, next) => {
 // -------------------CREANDO USUARIOS---------------------------
 const postUsers = async (req, resp, next) => {
 
-  const { email, password, roles } = req.body;
-  const user = new User({ email, password, roles });
-
-  // Body incluye correo-contraseña
-  if (!email || !password) return next(400);
-
-  // Email válido
-  if (!isValidEmail(email)) return next(400);
+  try {
+    const { email, password, roles } = req.body;
+    const user = new User({ email, password, roles });
   
-  // Contraseña válida
-  if (password.length < 4) return next(400);
+    if (!email || !password) return next(400);
+  
+    if (!isValidEmail(email)) return next(400);
+    
+    if (password.length < 4) return next(400);
+  
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) return next(403);
+  
+    const salt = bcrypt.genSaltSync();
+    user.password = bcrypt.hashSync(password, salt);
+  
+    // Guardar en database
+    await user.save();
+    resp.json(user);
 
-  // Correo existente
-  const existingEmail = await User.findOne({ email });
-  if (existingEmail) return next(403);
+  } catch (error) {
+    return next(400);
+  }
 
-  // Encriptando contraseña
-  const salt = bcrypt.genSaltSync();
-  user.password = bcrypt.hashSync(password, salt);
-
-  // Guardar en database
-  await user.save();
-  resp.json(user);
 };
 
 
