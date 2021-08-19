@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const { isValidMongoId } = require('../middleware/products');
 
 const { isValidEmail } = require('../helpers/helper');
 const { isAdmin } = require('../middleware/auth');
@@ -51,8 +52,8 @@ const getUserId = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-    const userById = isValidEmail(uid) 
-      ? await User.findOne({ email: uid }) 
+    const userById = isValidEmail(uid)
+      ? await User.findOne({ email: uid })
       : await User.findById(uid);
 
     if (!userById) {
@@ -72,19 +73,19 @@ const postUsers = async (req, resp, next) => {
   try {
     const { email, password, roles } = req.body;
     const user = new User({ email, password, roles });
-  
+
     if (!email || !password) return next(400);
-  
+
     if (!isValidEmail(email)) return next(400);
-    
+
     if (password.length < 4) return next(400);
-  
+
     const existingEmail = await User.findOne({ email });
     if (existingEmail) return next(403);
-  
+
     const salt = bcrypt.genSaltSync();
     user.password = bcrypt.hashSync(password, salt);
-  
+
     // Guardar en database
     await user.save();
     resp.json(user);
@@ -101,8 +102,8 @@ const deleteUser = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-    const userById = isValidEmail(uid) 
-      ? await User.findOneAndDelete({ email: uid }) 
+    const userById = isValidEmail(uid)
+      ? await User.findOneAndDelete({ email: uid })
       : await User.findByIdAndDelete(uid);
 
     if (!userById) {
@@ -122,50 +123,44 @@ const updateUser = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-
-    const userById = isValidEmail(uid) 
-      ? await User.findOne({ email: uid }) 
-      : await User.findById(uid);
-
+    // eslint-disable-next-line no-nested-ternary
+    const userById = isValidEmail(uid)
+      ? await User.findOne({ email: uid })
+      : isValidMongoId(uid)
+        ? await User.findById(uid)
+        : '';
     if (!userById) return next(404);
-    
+
     const { email, password, roles } = req.body;
-    const user = { email, password, roles };
 
-    if (!email || !password) return next(400);
-    if (!isValidEmail(email)) return next(400);
-    if (password.length < 4) return next(400);
+    if (!isAdmin(req) && roles && roles.admin) return next(403);
+    if (!password && !email) return next(400);
 
-    if (password) {
+    const isEqualPassword = bcrypt.compareSync(password, userById.password);
+
+    if (!isEqualPassword) {
       const salt = bcrypt.genSaltSync();
-      user.password = bcrypt.hashSync(password, salt);
+      userById.password = bcrypt.hashSync(password, salt);
     }
-
-    let userUpdate;
-
     if (!isAdmin(req)) {
-      userUpdate = isValidEmail(uid) 
-        ? await User.findOneAndUpdate({ email: uid }, password) 
-        : await User.findByIdAndUpdate(uid, password);
-    } else if (isAdmin(req)) {
-      userUpdate = isValidEmail(uid) 
-        ? await User.findOneAndUpdate({ email: uid }, user) 
-        : await User.findByIdAndUpdate(uid, user);
+      await User.findByIdAndUpdate(userById._id, userById);
     } else {
-      return next(403);
-    }
-    /* else if (!isAdmin(req) && roles.admin === true) {
-      return next(403);
-    }  */
-    
 
-    // Guardando datos
-    resp.json(userUpdate);
+      if (email !== userById.email) {
+        userById.email = email;
+      }
+      if (roles && roles.admin !== userById.roles.admin) {
+        userById.roles.admin = roles.admin;
+      }
+      await User.findByIdAndUpdate(userById._id, userById);
+    }
+    resp.json(userById);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
+
 
 
 module.exports = {
