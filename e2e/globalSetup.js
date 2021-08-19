@@ -107,7 +107,7 @@ module.exports = () => new Promise(async (resolve, reject) => {
     return resolve();
   }
 
-  // TODO: Configurar DB de tests
+  // DONE: Configurar DB de tests
   await setUp();
   process.env.DB_URL = process.env.MONGO_URL;
 
