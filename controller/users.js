@@ -58,6 +58,7 @@ const getUserId = async (req, resp, next) => {
     if (!userById) {
       return next(404);
     }
+
     resp.json(userById);
 
   } catch (error) {
@@ -100,6 +101,7 @@ const postUsers = async (req, resp, next) => {
 const deleteUser = async (req, resp, next) => {
 
   try {
+
     const { uid } = req.params;
     const userById = isValidEmail(uid) 
       ? await User.findOneAndDelete({ email: uid }) 
