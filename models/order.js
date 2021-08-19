@@ -1,11 +1,9 @@
 const { Schema, model } = require('mongoose');
 
 const orderSchema = new Schema({
-  _id: {
-    type: Number,
-  },
+
   userId: {
-    type: Number,
+    type: String,
     required: true,
   },
   client: {
@@ -19,9 +17,9 @@ const orderSchema = new Schema({
     },
     product: {
       type: Schema.Types.ObjectId,
+      ref: 'Product',
       required: true,
     },
-
   }],
   status: {
     type: String,
@@ -38,4 +36,5 @@ const orderSchema = new Schema({
     required: true,
   },
 });
-module.export = model('oders', orderSchema);
+
+module.export = model('Order', orderSchema);
