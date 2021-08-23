@@ -2,7 +2,6 @@ const Order = require('../models/order');
 
 
 // --------------POST ORDERS ----------------
-
 const postOrder = async(req, resp, next) => {
 
   try {
@@ -17,14 +16,13 @@ const postOrder = async(req, resp, next) => {
       products
     });
 
-
     // Guardar en database
-    // const completeOrder = await newOrder.populate(products.product)
-    // .execPopulate();
-    // await completeOrder.save();
+    await newOrder.save()
+    
+    const completeOrder = await newOrder.populate('products.product')
+    .execPopulate();
 
-    const generatedOrder = await newOrder.save()
-    return resp.json(generatedOrder);
+    return resp.json(completeOrder);
 
   } catch (error) {
     return next (500);

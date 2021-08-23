@@ -4,7 +4,6 @@ const {
   getOrders,
   getOrderById
 } = require('../controller/orders');
-
 const {
   requireAuth, requireUser, requireAdmin
 } = require('../middleware/auth');
