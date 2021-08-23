@@ -9,7 +9,7 @@ module.exports.isValidMongoId = (id) => {
 };
 
 module.exports.validOrderId = (req, resp, next) => (
-  (!module.exports.isValidMongoId(req.body.orderId))
+  (!module.exports.isValidMongoId(req.params.orderId))
     ? next(404)
     : next()
 );
