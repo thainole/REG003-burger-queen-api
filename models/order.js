@@ -28,13 +28,13 @@ const orderSchema = new Schema({
   dateEntry: {
     type: Date,
     default: Date.now,
-    required: true,
+    //required: true,
   },
   dateProcessed: {
     type: Date,
     default: Date.now,
-    required: true,
+    //required: true,
   },
 });
 
-module.export = model('Order', orderSchema);
+module.exports = model('Order', orderSchema);
