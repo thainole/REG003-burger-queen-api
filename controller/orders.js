@@ -1,4 +1,5 @@
 const Order = require('../models/order');
+const { pagination } = require('../helpers/helper');
 
 
 // --------------POST ORDERS ----------------
@@ -8,7 +9,6 @@ const postOrder = async (req, resp, next) => {
     const { userId, client, products } = req.body;
 
     if (!userId || !client || !products || products.length === 0) return next(400);
-
     
     const newOrder = new Order({
       userId, 
@@ -29,22 +29,34 @@ const postOrder = async (req, resp, next) => {
   }
 };
 
+
 // --------------GET ORDERS ----------------
 const getOrders = async (req, resp, next) => {
-  const { limit = 10 } = req.query;
+
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const page = parseInt(req.query.page, 10) || 1;
 
   try {
-    const orders = await Order.find()
-      .limit(Number(limit));
+    const orders = await Order.paginate({}, { limit, page });
+   
+    const url = `${req.protocol}://${req.get('host')}${req.path}`;
 
-    if (!orders) return next(404);
-    console.log(orders);
-    return resp.json(orders);
+    const links = pagination(orders, url, page, limit, orders.totalPages);
+
+    resp.links(links);
+
+    if (!orders) {
+      return next(404);
+    }
+    
+    return resp.json(orders.docs);
+
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 
 };
+
 
 // --------------GET ORDER ID ----------------
 const getOrderById = async (req, resp, next) => {

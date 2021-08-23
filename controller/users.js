@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { isValidMongoId } = require('../middleware/products');
-
-const { isValidEmail } = require('../helpers/helper');
+const { isValidEmail, pagination } = require('../helpers/helper');
 const { isAdmin } = require('../middleware/auth');
 
 
@@ -13,7 +12,6 @@ const postAdminUser = (adminUser, next) => {
 
   userFind.then((doc) => {
     if (doc) {
-      /* console.info('El usuario ya existe en la base de datos'); */
       return next(200);
     }
 
@@ -32,17 +30,26 @@ const postAdminUser = (adminUser, next) => {
 // ------------------OBTENIENDO USUARIOS-------------------------
 const getUsers = async (req, resp, next) => {
 
-  const { limit = 10 } = req.query;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const page = parseInt(req.query.page, 10) || 1;
+
   try {
-    const users = await User.find()
-      .limit(Number(limit));
+    const users = await User.paginate({}, { limit, page });
+
+    const url = `${req.protocol}://${req.get('host')}${req.path}`;
+
+    const links = pagination(users, url, page, limit, users.totalPages);
+
+    resp.links(links);
 
     if (!users) {
       return next(404);
     }
-    resp.json(users);
+
+    return resp.json(users.docs);
+
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
 

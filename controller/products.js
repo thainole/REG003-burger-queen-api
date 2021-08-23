@@ -1,22 +1,30 @@
 const Product = require('../models/product');
+const { pagination } = require('../helpers/helper');
 
 
 // ------------------OBTENIENDO PRODUCTOS-------------------------
 const getProducts = async (req, resp, next) => {
 
-  const { limit = 10 } = req.query;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const page = parseInt(req.query.page, 10) || 1;
 
   try {
-    const products = await Product.find()
-      .limit(Number(limit));
+    const products = await Product.paginate({}, { limit, page });
+
+    const url = `${req.protocol}://${req.get('host')}${req.path}`;
+
+    const links = pagination(products, url, page, limit, products.totalPages);
+
+    resp.links(links);
 
     if (!products) {
       return next(404);
     }
-    resp.json(products);
+
+    return resp.json(products.docs);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
 
