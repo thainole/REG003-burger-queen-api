@@ -29,12 +29,12 @@ const orderSchema = new Schema({
   dateEntry: {
     type: Date,
     default: Date.now,
-    //required: true,
+    // required: true,
   },
   dateProcessed: {
     type: Date,
     default: Date.now,
-    //required: true,
+    // required: true,
   },
 });
 

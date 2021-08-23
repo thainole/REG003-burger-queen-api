@@ -8,7 +8,7 @@ const {
   requireAuth, requireUser, requireAdmin
 } = require('../middleware/auth');
 
-const { validOrderId } = require('../middleware/orders')
+const { validOrderId } = require('../middleware/orders');
 
 /** @module orders */
 module.exports = (app, nextMain) => {
@@ -38,7 +38,7 @@ module.exports = (app, nextMain) => {
    * @code {200} si la autenticación es correcta
    * @code {401} si no hay cabecera de autenticación
    */
-  app.get('/orders', requireAuth, getOrders );
+  app.get('/orders', requireAuth, getOrders);
 
   /**
    * @name GET /orders/:orderId
