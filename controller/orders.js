@@ -13,7 +13,7 @@ const postOrder = async (req, resp, next) => {
     const newOrder = new Order({
       userId, 
       client, 
-      products: products.map(product => ({
+      products: products.map((product) => ({
         qty: product.qty,
         product: product.productId
       }))
@@ -28,7 +28,7 @@ const postOrder = async (req, resp, next) => {
     return resp.json(completeOrder);
 
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
@@ -73,7 +73,7 @@ const getOrderById = async (req, resp, next) => {
     resp.json(orderById);
 
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 
@@ -91,7 +91,7 @@ const deleteOrder = async (req, resp, next) => {
     resp.json(orderById);
     
   } catch (error) {
-    return next(500);
+    return next(error);
   }
 };
 

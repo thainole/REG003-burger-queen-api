@@ -44,7 +44,7 @@ const getProductById = async (req, resp, next) => {
     resp.json(productById);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
 
@@ -65,7 +65,7 @@ const postProduct = async (req, resp, next) => {
     resp.json(product);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 
 
@@ -86,7 +86,7 @@ const deleteProduct = async (req, resp, next) => {
     resp.json(productById);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
 
@@ -128,7 +128,7 @@ const updateProduct = async (req, resp, next) => {
     resp.json(productById);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
 

@@ -31,7 +31,7 @@ module.exports = (secret) => (req, resp, next) => {
       req.authToken = decodedToken;
       return next();
     } catch (error) {
-      return next(403);
+      return next(error);
     }
   });
 };

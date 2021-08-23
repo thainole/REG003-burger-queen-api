@@ -70,7 +70,7 @@ const getUserId = async (req, resp, next) => {
     resp.json(userById);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
 
@@ -99,7 +99,7 @@ const postUsers = async (req, resp, next) => {
     resp.json(user);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 
 };
@@ -122,7 +122,7 @@ const deleteUser = async (req, resp, next) => {
     resp.json(userById);
 
   } catch (error) {
-    return next(400);
+    return next(error);
   }
 };
 
