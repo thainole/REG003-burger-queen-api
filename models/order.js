@@ -29,20 +29,13 @@ const orderSchema = new Schema({
   dateEntry: {
     type: Date,
     default: Date.now,
-    required: true,
+    //required: true,
   },
   dateProcessed: {
     type: Date,
     default: Date.now,
-    required: true,
+    //required: true,
   },
 });
-
-// eslint-disable-next-line func-names
-orderSchema.methods.toJSON = function () {
-  const { __v, ...order } = this.toObject();
-  return order;
-};
-
 
 module.exports = model('Order', orderSchema);
