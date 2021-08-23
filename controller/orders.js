@@ -13,7 +13,10 @@ const postOrder = async (req, resp, next) => {
     const newOrder = new Order({
       userId, 
       client, 
-      products
+      products: products.map(product => ({
+        qty: product.qty,
+        product: product.productId
+      }))
     });
 
     // Guardar en database
@@ -79,6 +82,7 @@ const getOrderById = async (req, resp, next) => {
 const deleteOrder = async (req, resp, next) => {
   try {
     const { orderId } = req.params;
+    console.log(orderId);
 
     if (!orderId) return next(404);
     
