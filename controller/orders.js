@@ -2,6 +2,7 @@ const Order = require('../models/order');
 
 
 // --------------POST ORDERS ----------------
+
 const postOrder = async(req, resp, next) => {
 
   try {
@@ -79,8 +80,6 @@ const deleteOrder = async(req, resp, next) => {
     return next(500)
   }
 }
-
-
 
 module.exports = {
   postOrder,
