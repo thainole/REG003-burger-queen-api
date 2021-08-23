@@ -80,8 +80,6 @@ const deleteOrder = async(req, resp, next) => {
   }
 }
 
-
-
 module.exports = {
   postOrder,
   deleteOrder,

@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const { Product } = require('./product');
 
 const orderSchema = new Schema({
 
