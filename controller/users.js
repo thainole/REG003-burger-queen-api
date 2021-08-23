@@ -13,7 +13,7 @@ const postAdminUser = (adminUser, next) => {
 
   userFind.then((doc) => {
     if (doc) {
-      console.info('El usuario ya existe en la base de datos');
+      /* console.info('El usuario ya existe en la base de datos'); */
       return next(200);
     }
 

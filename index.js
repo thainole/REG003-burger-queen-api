@@ -11,13 +11,13 @@ const { port, dbUrl, secret } = config;
 
 const app = express();
 
-// TODO: Conexión a la Base de Datos (MongoDB o MySQL)
+// DONE: Conexión a la Base de Datos (MongoDB o MySQL)
 mongoose
   .connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true
   })
-  // eslint-disable-next-line no-console
   .then(() => console.info('Conected to DB'))
   .catch(console.error);
 
