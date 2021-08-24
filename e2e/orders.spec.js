@@ -299,7 +299,7 @@ describe('PUT /orders/:orderId', () => {
       })
       .then(([product, user]) => fetchAsTestUser('/orders', {
         method: 'POST',
-        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id },
+        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id, client: 'client' },
       }))
       .then((resp) => {
         expect(resp.status).toBe(200);
@@ -326,7 +326,7 @@ describe('PUT /orders/:orderId', () => {
       })
       .then(([product, user]) => fetchAsTestUser('/orders', {
         method: 'POST',
-        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id },
+        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id, client: 'client' },
       }))
       .then((resp) => {
         expect(resp.status).toBe(200);
@@ -354,7 +354,7 @@ describe('PUT /orders/:orderId', () => {
       })
       .then(([product, user]) => fetchAsTestUser('/orders', {
         method: 'POST',
-        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id },
+        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id, client: 'client' },
       }))
       .then((resp) => {
         expect(resp.status).toBe(200);
@@ -389,7 +389,7 @@ describe('PUT /orders/:orderId', () => {
       })
       .then(([product, user]) => fetchAsTestUser('/orders', {
         method: 'POST',
-        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id },
+        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id, client: 'client'  },
       }))
       .then((resp) => {
         expect(resp.status).toBe(200);
@@ -424,7 +424,7 @@ describe('PUT /orders/:orderId', () => {
       })
       .then(([product, user]) => fetchAsTestUser('/orders', {
         method: 'POST',
-        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id },
+        body: { products: [{ productId: product._id, qty: 5 }], userId: user._id, client: 'client'  },
       }))
       .then((resp) => {
         expect(resp.status).toBe(200);
