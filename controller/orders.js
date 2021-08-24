@@ -9,11 +9,11 @@ const postOrder = async (req, resp, next) => {
     const { userId, client, products } = req.body;
 
     if (!userId || !client || !products || products.length === 0) return next(400);
-    
+
     const newOrder = new Order({
-      userId, 
-      client, 
-      products: products.map(product => ({
+      userId,
+      client,
+      products: products.map((product) => ({
         qty: product.qty,
         product: product.productId
       }))
@@ -21,7 +21,7 @@ const postOrder = async (req, resp, next) => {
 
     // Guardar en database
     await newOrder.save();
-    
+
     const completeOrder = await newOrder.populate('products.product')
       .execPopulate();
 
@@ -41,7 +41,7 @@ const getOrders = async (req, resp, next) => {
 
   try {
     const orders = await Order.paginate({}, { limit, page });
-   
+
     const url = `${req.protocol}://${req.get('host')}${req.path}`;
 
     const links = pagination(orders, url, page, limit, orders.totalPages);
@@ -81,7 +81,7 @@ const getOrderById = async (req, resp, next) => {
 };
 
 // --------------PUT ORDER ID ----------------
-const updateOrder = async(req, resp, next) => {
+const updateOrder = async (req, resp, next) => {
 
   try {
 
@@ -90,12 +90,12 @@ const updateOrder = async(req, resp, next) => {
 
     const orderById = await Order.findById(orderId);
     
-    if(!orderById) return next(404);
+    if (!orderById) return next(404);
 
-    if(!userId && !client && !products && !status) return next(400);
+    if (!userId && !client && !products && !status) return next(400);
 
-    if(orderById.status === status && orderById.userId === userId
-      && orderById.products === products && orderById.client === client) return next(400)
+    if (orderById.status === status && orderById.userId === userId
+      && orderById.products === products && orderById.client === client) return next(400);
     
     if (userId) {
       orderById.userId = userId;
@@ -125,7 +125,7 @@ const updateOrder = async(req, resp, next) => {
   } catch (error) {
     return next(error);
   }
-}
+};
 
 
 // --------------DELETE ORDERS ----------------
