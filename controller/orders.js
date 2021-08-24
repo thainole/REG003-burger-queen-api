@@ -13,7 +13,7 @@ const postOrder = async (req, resp, next) => {
     const newOrder = new Order({
       userId, 
       client, 
-      products: products.map((product) => ({
+      products: products.map(product => ({
         qty: product.qty,
         product: product.productId
       }))
@@ -80,11 +80,59 @@ const getOrderById = async (req, resp, next) => {
   }
 };
 
+// --------------PUT ORDER ID ----------------
+const updateOrder = async(req, resp, next) => {
+
+  try {
+
+    const { userId, client, products, status } = req.body;
+    const { orderId } = req.params;
+
+    const orderById = await Order.findById(orderId);
+    
+    if(!orderById) return next(404);
+
+    if(!userId && !client && !products && !status) return next(400);
+
+    if(orderById.status === status && orderById.userId === userId
+      && orderById.products === products && orderById.client === client) return next(400)
+    
+    if (userId) {
+      orderById.userId = userId;
+    }
+    if (client) {
+      orderById.client = client;
+    }
+    if (products) {
+      orderById.products = products;
+    }
+    if (status) {
+      orderById.status = status;
+    }
+    
+    const statusOrder = [
+      'pending',
+      'canceled',
+      'delivering',
+      'delivered',
+      'preparing',
+    ];
+    if (status && !statusOrder.includes(status)) return next(400);
+
+    await Order.findByIdAndUpdate(orderId, orderById);
+
+    return resp.json(orderById);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 
 // --------------DELETE ORDERS ----------------
 const deleteOrder = async (req, resp, next) => {
   try {
     const { orderId } = req.params;
+    console.log(orderId);
 
     if (!orderId) return next(404);
     
@@ -101,5 +149,6 @@ module.exports = {
   postOrder,
   deleteOrder,
   getOrders,
-  getOrderById
+  getOrderById,
+  updateOrder
 };
