@@ -6,24 +6,23 @@ const { isAdmin } = require('../middleware/auth');
 
 
 // ---------------------CREANDO ADMIN---------------------------
-const postAdminUser = (adminUser, next) => {
+const postAdminUser = async (adminUser, next) => {
 
-  const userFind = User.findOne({ email: adminUser.email });
+  const userFind = await User.findOne({ email: adminUser.email });
 
-  userFind.then((doc) => {
-    if (doc) {
+  try {
+    if (userFind !== null) {
       return next(200);
     }
 
     const newUser = new User(adminUser);
     newUser.save();
     console.info('El usuario ha sido creado');
-  })
-    .catch((err) => {
-      if (err !== 200) {
-        console.info('Ha ocurrido un error', err);
-      }
-    });
+
+  } catch (error) {
+    if (error !== 200) return error;
+  }
+  
 };
 
 
