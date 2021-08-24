@@ -61,7 +61,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {404} si la orden con `orderId` indicado no existe
    */
-  app.get('/orders/:orderId', requireAdmin, getOrderById);
+  app.get('/orders/:orderId', [requireAuth, validOrderId], getOrderById);
 
   /**
    * @name POST /orders
