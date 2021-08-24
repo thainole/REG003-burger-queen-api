@@ -63,14 +63,17 @@ const getOrders = async (req, resp, next) => {
 
 // --------------GET ORDER ID ----------------
 const getOrderById = async (req, resp, next) => {
-  
+
   try {
     const { orderId } = req.params;
     const orderById = await Order.findById(orderId);
-    
-    if (!orderById) return next(404);
+    if (!orderById) {
+      return next(404);
+    }
+    const order = await orderById.populate('products.product')
+      .execPopulate();
 
-    resp.json(orderById);
+    resp.json(order);
 
   } catch (error) {
     return next(error);
@@ -82,7 +85,6 @@ const getOrderById = async (req, resp, next) => {
 const deleteOrder = async (req, resp, next) => {
   try {
     const { orderId } = req.params;
-    console.log(orderId);
 
     if (!orderId) return next(404);
     
