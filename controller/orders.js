@@ -13,7 +13,7 @@ const postOrder = async (req, resp, next) => {
     const newOrder = new Order({
       userId, 
       client, 
-      products: products.map((product) => ({
+      products: products.map(product => ({
         qty: product.qty,
         product: product.productId
       }))
@@ -110,8 +110,6 @@ const updateOrder = async(req, resp, next) => {
       orderById.status = status;
     }
     
-    console.log('lineaa118')
-
     const statusOrder = [
       'pending',
       'canceled',
@@ -134,6 +132,7 @@ const updateOrder = async(req, resp, next) => {
 const deleteOrder = async (req, resp, next) => {
   try {
     const { orderId } = req.params;
+    console.log(orderId);
 
     if (!orderId) return next(404);
     
