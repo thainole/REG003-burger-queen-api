@@ -51,7 +51,7 @@ const getOrders = async (req, resp, next) => {
     if (!orders) {
       return next(404);
     }
-    
+
     return resp.json(orders.docs);
 
   } catch (error) {
