@@ -7,10 +7,10 @@ const httpErrors = {
 };
 
 const isKnownHTTPErrorStatus = (num) => (
-  typeof num === 'number' && Object.keys(httpErrors).indexOf(`${num}`) >= 0
+  typeof num === 'number' && Object.keys(httpErrors).indexOf(`${num}`) >= 0 // indica que existe el statusCode
 );
 
-// eslint-disable-next-line no-unused-vars
+
 module.exports = (err, req, resp, next) => {
   const statusCode = (isKnownHTTPErrorStatus(err))
     ? err

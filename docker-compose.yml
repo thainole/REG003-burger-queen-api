@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-  # TODO: configura tu imagen de base de datos, te recomendamos una de estas:
+  # DONE: configura tu imagen de base de datos, te recomendamos una de estas:
     image: mongo:4
     volumes:
       - ./db-data:/data/db
