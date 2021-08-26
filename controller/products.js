@@ -10,14 +10,10 @@ const getProducts = async (req, resp, next) => {
 
   try {
     const products = await Product.paginate({}, { limit, page });
-
     const url = `${req.protocol}://${req.get('host')}${req.path}`;
-
     const links = pagination(products, url, page, limit, products.totalPages);
-
     resp.links(links);
-
-    if (!products) {
+    if (!products.docs) {
       return next(404);
     }
 
@@ -136,7 +132,7 @@ const updateProduct = async (req, resp, next) => {
 
 module.exports = {
   getProducts,
-  getProductById, 
+  getProductById,
   postProduct,
   deleteProduct,
   updateProduct,
