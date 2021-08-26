@@ -52,7 +52,10 @@ const getOrders = async (req, resp, next) => {
       return next(404);
     }
 
-    return resp.json(orders.docs);
+
+    const order = await Promise.all(orders.docs.map((ele) => ele.populate('products.product').execPopulate()));
+    return resp.json(order);
+
 
   } catch (error) {
     return next(error);
@@ -104,12 +107,15 @@ const updateOrder = async (req, resp, next) => {
       orderById.client = client;
     }
     if (products) {
-      orderById.products = products;
+      orderById.products = products.map((prod) => ({
+        qty: prod.qty,
+        product: prod.productId
+      }));
     }
     if (status) {
       orderById.status = status;
     }
-    
+
     const statusOrder = [
       'pending',
       'canceled',
@@ -119,9 +125,13 @@ const updateOrder = async (req, resp, next) => {
     ];
     if (status && !statusOrder.includes(status)) return next(400);
 
-    await Order.findByIdAndUpdate(orderId, orderById);
-
-    return resp.json(orderById);
+    const orderUpdate = await Order.findByIdAndUpdate(orderId, orderById);
+    if (!orderUpdate) {
+      return next(404);
+    }
+    const order = await orderById.populate('products.product')
+      .execPopulate();
+    return resp.json(order);
   } catch (error) {
     return next(error);
   }
@@ -132,13 +142,14 @@ const updateOrder = async (req, resp, next) => {
 const deleteOrder = async (req, resp, next) => {
   try {
     const { orderId } = req.params;
-    console.log(orderId);
+
 
     if (!orderId) return next(404);
     
     const orderById = await Order.findByIdAndDelete(orderId);
-    
-    resp.json(orderById);
+    const order = await orderById.populate('products.product')
+      .execPopulate();
+    return resp.json(orderById);
     
   } catch (error) {
     return next(error);
