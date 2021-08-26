@@ -4,12 +4,13 @@
 
 ## Índice
 
-* [1. Resumen del proyecto](#2-resumen-del-proyecto)
-* [3. Objetivos de aprendizaje](#3-objetivos-de-aprendizaje)
-* [4. Consideraciones generales](#4-consideraciones-generales)
-* [5. Criterios de aceptación mínimos del proyecto](#5-criterios-de-aceptaci%C3%B3n-m%C3%ADnimos-del-proyecto)
-* [6. Pistas, tips y lecturas complementarias](#6-pistas-tips-y-lecturas-complementarias)
-* [7 HTTP API Checklist](#7-http-api-checklist)
+* [1. Resumen del proyecto](#1-resumen-del-proyecto)
+* [2. Desarrollo del proyecto](#2-desarrollo-del-proyecto)
+  * [2.1 API](#2.1-api)
+  * [2.1 CLI](#2.1-api)
+* [3. Tests](#3-tests)
+* [4. Despliegue](#4-despliegue)
+
 
 
 ## 1. Resumen del proyecto
@@ -33,13 +34,13 @@ La clienta nos brindó una [documentación](https://laboratoria.github.io/burger
 
 Según lo establecido por la documentación, la _API_ debe exponer los siguientes endpoints:
 
-#### `/`
+#### `/` - `/auth`
 
 * `GET /`
-
-#### `/auth`
-
 * `POST /auth`
+
+![home-and-auth](https://cutt.ly/TWilL9S)
+
 
 #### `/users`
 
@@ -49,6 +50,9 @@ Según lo establecido por la documentación, la _API_ debe exponer los siguiente
 * `PUT /users/:uid`
 * `DELETE /users/:uid`
 
+![users](https://cutt.ly/vWil14T)
+
+
 #### `/products`
 
 * `GET /products`
@@ -56,6 +60,9 @@ Según lo establecido por la documentación, la _API_ debe exponer los siguiente
 * `POST /products`
 * `PUT /products/:productid`
 * `DELETE /products/:productid`
+
+![products](https://cutt.ly/7Wil8jJ)
+
 
 #### `/orders`
 
@@ -65,6 +72,7 @@ Según lo establecido por la documentación, la _API_ debe exponer los siguiente
 * `PUT /orders/:orderId`
 * `DELETE /orders/:orderId`
 
+![orders](https://cutt.ly/XWil7Td)
 
 
 ### 2.2. CLI
@@ -84,25 +92,11 @@ npm start 8888
 
 Nuestra aplicación usa las siguientes variables de entorno:
 
-* `PORT`: Si no se ha especificado un puerto como argumento de lína de comando,
-  podemos usar la variable de entorno `PORT` para especificar el puerto. Valor
-  por defecto `8080`.
-* `DB_URL`: El _string_ de conexión de _MongoDB_ o _MySQL_. Cuando ejecutemos la
-  aplicación en nuestra computadora (en entorno de desarrollo), podemos usar el
-  una base de datos local, pero en producción deberemos utilizar las instancias
-  configuradas con `docker-compose` (mas sobre esto en la siguiente sección de
-  **Deployment**)
-* `JWT_SECRET`: Nuestra aplicación implementa autenticación usando JWT (JSON
-  Web Tokens). Para poder firmar (cifrar) y verificar (descifrar) los tokens,
-  nuestra aplicación necesita un secreto. En local puedes usar el valor por
-  defecto (`xxxxxxxx`), pero es muy importante que uses un _secreto_ de verdad
-  en producción.
-* `ADMIN_EMAIL`: Opcionalmente podemos especificar un email y password para
-  el usuario admin (root). Si estos detalles están presentes la aplicación se
-  asegurará que exista el usuario y que tenga permisos de administrador. Valor
-  por defecto `admin@localhost`.
-* `ADMIN_PASSWORD`: Si hemos especificado un `ADMIN_EMAIL`, debemos pasar
-  también una contraseña para el usuario admin. Valor por defecto: `changeme`.
+* `PORT`: Si no se ha especificado un puerto como argumento de lína de comando, podemos usar la variable de entorno `PORT` para especificar el puerto. Valor  por defecto `8080`.
+* `DB_URL`: El _string_ de conexión de _MongoDB_. Cuando ejecutemos la  aplicación en nuestra computadora (en entorno de desarrollo), podemos usar una base de datos local, pero en producción deberemos utilizar las instancias configuradas con `docker-compose` (mas sobre esto en la siguiente sección de **Deployment**)
+* `JWT_SECRET`: Nuestra aplicación implementa autenticación usando JWT (JSON Web Tokens). Para poder firmar (cifrar) y verificar (descifrar) los tokens, nuestra aplicación necesita un secreto. 
+* `ADMIN_EMAIL`: Opcionalmente podemos especificar un email y password para el usuario admin (root). Si estos detalles están presentes la aplicación se asegurará que exista el usuario y que tenga permisos de administrador. Valor por defecto `admin@localhost`.
+* `ADMIN_PASSWORD`: Si hemos especificado un `ADMIN_EMAIL`, debemos pasar también una contraseña para el usuario admin. Valor por defecto: `changeme`.
 
 
 
@@ -110,7 +104,11 @@ Nuestra aplicación usa las siguientes variables de entorno:
 
 Al finalizar el proyecto, los tests - tanto end-to-end como las pruebas unitarias - superaron el mínimo del 90% de _statements_, _functions_, _lines_ y _branches_. 
 
-## 4. Despliegue (Deployment)
+![tests](https://cutt.ly/TWizenx)
+
+
+
+## 4. Despliegue
 
 Nuestra clienta nos ha manifestado que su equipo de _devops_ está siempre con
 muchas tareas, por por lo que nos pide como requerimiento que la aplicación esté
