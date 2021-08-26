@@ -13,7 +13,7 @@ const req = {
       admin: true
     }
   },
-  parems: {
+  params: {
     uid: '6115ad7f112f521f99c5550a'
   }
 };
