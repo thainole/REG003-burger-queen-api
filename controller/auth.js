@@ -19,14 +19,13 @@ module.exports.authUsers = async (req, resp, next) => {
   if (!validUsuario) {
     return next(404);
   }
-
+  console.log('paso validusuario');
+  
   const validPassword = bcrypt.compareSync(password, validUsuario.password);
   if (!validPassword) {
-    return resp.status(400).json({
-      msg: 'Usuario / Password no son correctos - password',
-    });
+    return next(400);
   }
-
+  console.log('paso validPass');
   jwt.sign(
     {
       uid: validUsuario._id,
@@ -40,7 +39,7 @@ module.exports.authUsers = async (req, resp, next) => {
     (err, token) => {
       if (err) console.error(err);
 
-      return resp.status(200).json({ token });
+      return resp.json({ token });
     },
   );
 };

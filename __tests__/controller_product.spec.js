@@ -29,7 +29,6 @@ const req = {
   query: {
     limit: '',
     page: ''
-
   },
   body: {
     name: 'agua',
@@ -43,12 +42,14 @@ const req = {
     return `${host}`;
   }
 };
+
 const req403 = {
   params: {
     productId: '6115ad7f112f521f99c5550b'
   },
   body: {},
 };
+
 const mockResponse = () => {
   const res = {};
   res.status = jest.fn().mockReturnValue(res);
