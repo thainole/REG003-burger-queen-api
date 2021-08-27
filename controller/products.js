@@ -50,21 +50,17 @@ const postProduct = async (req, resp, next) => {
 
   try {
     const { name, price, image, type } = req.body;
-    const product = new Product({ name, price, image, type });
-  
     if (!name || !price) return next(400);
-  
+    const product = new Product({ name, price, image, type });
     product.dateEntry = new Date();
-    
+
     // Guardar en database
     await product.save();
-    resp.json(product);
+    return resp.json(product);
 
   } catch (error) {
     return next(error);
   }
-
-
 };
 
 
@@ -127,8 +123,6 @@ const updateProduct = async (req, resp, next) => {
     return next(error);
   }
 };
-
-
 
 module.exports = {
   getProducts,
