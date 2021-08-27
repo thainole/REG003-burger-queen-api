@@ -22,7 +22,7 @@ const postAdminUser = async (adminUser, next) => {
   } catch (error) {
     if (error !== 200) return error;
   }
-  
+
 };
 
 
@@ -66,7 +66,7 @@ const getUserId = async (req, resp, next) => {
       return next(404);
     }
 
-    resp.json(userById);
+    return resp.json(userById);
 
   } catch (error) {
     return next(error);
@@ -95,7 +95,7 @@ const postUsers = async (req, resp, next) => {
 
     // Guardar en database
     await user.save();
-    resp.json(user);
+    return resp.json(user);
 
   } catch (error) {
     return next(error);
@@ -118,7 +118,7 @@ const deleteUser = async (req, resp, next) => {
       return next(404);
     }
 
-    resp.json(userById);
+    return resp.json(userById);
 
   } catch (error) {
     return next(error);
@@ -162,7 +162,7 @@ const updateUser = async (req, resp, next) => {
       }
       await User.findByIdAndUpdate(userById._id, userById);
     }
-    resp.json(userById);
+    return resp.json(userById);
 
   } catch (error) {
     return next(error);
