@@ -48,10 +48,9 @@ const getOrders = async (req, resp, next) => {
 
     resp.links(links);
 
-    if (!orders) {
-      return next(404);
-    }
-
+    // if (!orders) {
+    //   return next(404);
+    // }
 
     const order = await Promise.all(orders.docs.map((ele) => ele.populate('products.product').execPopulate()));
     return resp.json(order);

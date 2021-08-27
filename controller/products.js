@@ -61,8 +61,6 @@ const postProduct = async (req, resp, next) => {
   } catch (error) {
     return next(error);
   }
-
-
 };
 
 
@@ -125,8 +123,6 @@ const updateProduct = async (req, resp, next) => {
     return next(error);
   }
 };
-
-
 
 module.exports = {
   getProducts,
