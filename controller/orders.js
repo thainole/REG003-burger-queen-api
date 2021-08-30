@@ -48,13 +48,8 @@ const getOrders = async (req, resp, next) => {
 
     resp.links(links);
 
-    // if (!orders) {
-    //   return next(404);
-    // }
-
     const order = await Promise.all(orders.docs.map((ele) => ele.populate('products.product').execPopulate()));
     return resp.json(order);
-
 
   } catch (error) {
     return next(error);
@@ -75,7 +70,7 @@ const getOrderById = async (req, resp, next) => {
     const order = await orderById.populate('products.product')
       .execPopulate();
 
-    resp.json(order);
+    return resp.json(order);
 
   } catch (error) {
     return next(error);
@@ -91,7 +86,6 @@ const updateOrder = async (req, resp, next) => {
     const { orderId } = req.params;
 
     const orderById = await Order.findById(orderId);
-    
     if (!orderById) return next(404);
 
     if (!userId && !client && !products && !status) return next(400);

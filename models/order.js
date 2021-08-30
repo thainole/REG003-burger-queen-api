@@ -38,6 +38,12 @@ const orderSchema = new Schema({
   },
 });
 
+// eslint-disable-next-line func-names
+orderSchema.methods.toJSON = function () {
+  const { __v, ...order } = this.toObject();
+  return order;
+};
+
 orderSchema.plugin(mongoosePaginate);
 
 module.exports = model('Order', orderSchema);

@@ -1,8 +1,8 @@
 const setUp = require('@shelf/jest-mongodb/setup');
 const mongoose = require('mongoose');
 const { authUsers } = require ('../controller/auth');
+const { postUsers } = require('../controller/users');
 
-// -----------------------------------------------
 let connection;
 beforeAll(async () => {
   await setUp();
@@ -15,18 +15,34 @@ beforeAll(async () => {
     });
 });
 
+afterAll(async () => {
+  await mongoose.connection.close();
+});
+
+reqPostUser = {
+  body: {
+    email: 'hola@test.test',
+    password: 'test123',
+    roles: {
+      admin: false 
+    },
+  },
+};
+
+reqPostUserAdmin = {
+  body: {
+    email: 'admin@test.test',
+    password: 'test123',
+    roles: {
+      admin: true 
+    },
+  },
+};
+
 const req = {
   body: {
-    email: 'test@test.test',
+    email: 'hola@test.test',
     password: '123456'
-  },
-  // params: {
-  //   uid: '6115ad7f112f521f99c5550a'
-  // },
-  protocol: 'https',
-  path: 'path',
-  get(host) {
-    return `${host}`;
   }
 };
 
@@ -37,13 +53,12 @@ const req400 = {
   }
 };
 
-const res = {
-  token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MTE1YWQ3ZjExMmY1MjFmOTljNTU1MGEiLCJlbWFpbCI6InRlc3RAdGVzdC50ZXN0Iiwicm9sZXMiOnsiYWRtaW4iOmZhbHNlfSwiaWF0IjoxNjI5OTA3NjU4LCJleHAiOjE2Mjk5MjIwNTh9.omIfsKyNtim8gP6K15ZOgkLqgCNi3z3vmylK8ppbYzA' 
-}
-
-const res400 = {
-  msg: 'Usuario / Password no son correctos - password' 
-}
+const req404 = {
+  body: {
+    email: 'hola',
+    password: '123456'
+  }
+};
 
 const mockResponse = () => {
   const res = {};
@@ -54,45 +69,33 @@ const mockResponse = () => {
 
 const next = jest.fn();
 
-afterEach(() => {
-  jest.clearAllMocks();
-});
-
 describe('Auth user', () => {
-  it.skip('auth user', async () => {
+  it('auth user', async () => {
     const res = mockResponse();
-    await authUsers(req, res, next);
+    const newUser = await postUsers(reqPostUser, res, next);
+    const auth = await authUsers(req, res, next);
     expect(res.json).toHaveBeenCalled();
+    expect(res.json.mock.calls.length).toBe(1);
   });
-
-  it('require next 400', () => {
-    authUsers(req400, res400, next);
+  it('auth admin user', async () => {
+    const res = mockResponse();
+    const newUser = await postUsers(reqPostUserAdmin, res, next);
+    const auth = await authUsers(req, res, next);
+    expect(res.json).toHaveBeenCalled();
+    expect(res.json.mock.calls.length).toBe(1);
+  });
+  it('require next 400', async() => {
+    const res = mockResponse();
+    await authUsers(req400, res, next);
     expect(next).toHaveBeenCalled();
     expect(next).toHaveBeenCalledWith(400);
-    expect(next.mock.calls.length).toBe(1);
+    expect(next.mock.calls.length).toBe(3);
+  });
+  it('require next 404', async() => {
+    const res = mockResponse();
+    await authUsers(req404, res, next);
+    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(404);
+    expect(next.mock.calls.length).toBe(4);
   });
 });
-
-
-// -----------------------------------------------
-// describe('auth user', ()=> {
-//   jest.spyOn(Usuario, 'findOne').mockReturnValue(Promise.resolve({ email: "test@gmail.com" }))
-// })
-
-// describe('When email user exists', () => {
-//   beforeAll(() => {
-//     Usuario.findOne = jest.fn().mockResolvedValue([{
-//         email: 'test@test.test',
-//       }
-//     ])
-//   });
-//   it('Should return token', async() => {
-//     const worldService = new WorldService(Usuario);
-//     const expected = [{
-//         res
-//       },
-//     ];
-//       await expect(worldService.getWorlds()).resolves.toEqual(expected);
-//   });
-// });
-
