@@ -1,5 +1,6 @@
 const setUp = require('@shelf/jest-mongodb/setup');
 const mongoose = require('mongoose');
+
 const {   
   postOrder,
   deleteOrder,
@@ -7,6 +8,10 @@ const {
   getOrderById,
   updateOrder 
 } = require ('../controller/orders');
+const {
+  postProduct,
+} = require('../controller/products');
+
 const Order = require('../models/order');
 
 let connection;
@@ -20,28 +25,32 @@ beforeAll(async () => {
       useCreateIndex: true
     });
 });
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
-const req = {
+
+const reqProduct = { 
   body: {
-    userId: "6115ad7f112f521f99c5550a",
-    client: "Maisita2",
-    products: [{
-      productId: "611addf1c18bd21d1fe13faa",
-      qty: 50
-    },
-    {
-      productId: "611addf7c18bd21d1fe13fad",
-      qty: 20
-    }]
-  },
+    name: 'agua',
+    price: 2,
+    image: 'imagen',
+    type: 'tipo'
+  }
+};
+
+const req = {
   params: {
-    orderId: '6127d0f63720161dcab8deba'
+    orderId: '61242c6a35037b175cd0d37d'
   },
   query: {
     limit: '',
     page: ''
+  },
+  body: {
+    userId: "6115ad7f112f521f99c5550a",
+    client: "Joshua Homme",
+    products: []
   },
   protocol: 'https',
   path: 'path',
@@ -53,8 +62,9 @@ const req = {
 const req400 = {
   body: {
     userId: "6115ad7f112f521f99c5550a",
-    client: "Maisita2",
-    products: []
+    client: "Cliente test",
+    products: [],
+    status: ''
   },
   params: {
     orderId: '61242c7a35037b175cd0d383'
@@ -66,88 +76,103 @@ const req404 = {
   params: {
     orderId: '61242c7a35037b175cd0d383'
   }
-} 
+};
 
 const mockResponse = () => {
   const res = {};
   res.status = jest.fn().mockReturnValue(res);
   res.links = jest.fn().mockReturnValue(res);
-  // res.populate = jest.fn().mockReturnValue(res);
-  res.json = jest.fn((body) => body);
+  res.json = jest.fn(body => body);
   return res;
 };
 
 const next = jest.fn();
 
-const res400 = {
-  statusCode: 400,
-  message: "Bad request"
-}
-const res404 = {
-  statusCode: 404,
-  message: "Not found"
-}
-
 afterEach(() => {
   jest.clearAllMocks();
 });
 
-
+describe('post orders controller', () => {
+  it('post order', async () => {
+    const res = mockResponse();
+    const product = await postProduct(reqProduct, res, next);
+    req.body.products.push({productId: product._id, qty: 2});
+    const post = await postOrder(req, res, next);
+    expect(res.json).toHaveBeenCalled();
+    expect(res.json).toHaveBeenCalledWith(post);
+    expect(res.json.mock.calls.length).toBe(2);
+  });
+  it('require next 400', () => {
+    const res = mockResponse();
+    postOrder(req400, res, next);
+    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(400);
+    expect(next.mock.calls.length).toBe(1);
+  });
+});
 
 describe('get orders controller', () => {
   it('get orders', async () => {
     const res = mockResponse();
-    await getOrders(req, res, next);
+    const product = await postProduct(reqProduct, res, next);
+    req.body.products.push({productId: product._id, qty: 2});
+    const orders = await getOrders(req, res, next);
     expect(res.links).toHaveBeenCalled();
     expect(res.json).toHaveBeenCalled();
+    expect(res.json.mock.calls.length).toBe(2);
   });
 });
 
 describe('getOrderById', () => {
   it('resp json', async () => {
     const res = mockResponse();
+    const product = await postProduct(reqProduct, res, next);
+    req.body.products.push({productId: product._id, qty: 2});   
     const order = await getOrders(req, res, next);
-    req.params = order._id;
-    await getOrderById(req, res, next);
+    req.params.orderId = order[0]._id;
+    const orderbyId = await getOrderById(req, res, next);
     expect(res.json).toHaveBeenCalled();
-    expect(res.json).toHaveBeenCalledWith(order);
+    expect(res.json).toHaveBeenCalledWith(orderbyId);
+    expect(res.json.mock.calls.length).toBe(3);
+  });
+  it('require next 404', async() => {
+    const res = mockResponse();
+    await getOrderById(req404, res, next);
+    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(404);
   });
 });
 
-describe('put orders controller', () => {
+describe('put order controller', () => {
   it('res.json', async () => {
     const res = mockResponse();
-    const order = await getOrders(req, res, next);
-    req404.params.orderId = order._id;
-    await updateOrder(req, res, next);
+    const product = await postProduct(reqProduct, res, next);
+    req.body.products.push({productId: product._id, qty: 2});
+    const order = await getOrders(req, res, next); 
+    req.params.orderId = order[0]._id;
+    const putOrder = await updateOrder(req, res, next);
     expect(res.json).toHaveBeenCalled();
-    expect(res.json).toHaveBeenCalledWith(order);
+    expect(res.json).toHaveBeenCalledWith(putOrder);
+    expect(res.json.mock.calls.length).toBe(3);
+  });
+  it('require next 404', async() => {
+    const res = mockResponse();
+    await updateOrder(req404, res, next);
+    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(404);
   });
 });
 
 describe('delete orders controller', () => {
   it('res.json', async () => {
     const res = mockResponse();
+    const product = await postProduct(reqProduct, res, next);
+    req.body.products.push({productId: product._id, qty: 2});  
     const order = await getOrders(req, res, next);
-    req.params = order._id;
+    req.params = order[0]._id;
     await deleteOrder(req, res, next);
     expect(res.json).toHaveBeenCalled();
     expect(res.json).toHaveBeenCalledWith(order);
+    expect(res.json.mock.calls.length).toBe(2);
   });
-});
-
-describe('post orders controller', () => {
-  it('require next 400', () => {
-    postOrder(req400, res400, next);
-    expect(next).toHaveBeenCalled();
-    expect(next).toHaveBeenCalledWith(400);
-    expect(next.mock.calls.length).toBe(1);
-  })
-  it('post order', async () => {
-    const res = mockResponse();
-    const post = await postOrder(req, res, next);
-    //expect(res.links).toHaveBeenCalled();
-    expect(res.json).toHaveBeenCalled(post);
-  });
-
 });
