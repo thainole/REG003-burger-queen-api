@@ -7,9 +7,7 @@ const {
   getOrderById,
   updateOrder 
 } = require ('../controller/orders');
-const {
-  postProduct,
-} = require('../controller/products');
+const { postProduct } = require('../controller/products');
 
 const Order = require('../models/order');
 
