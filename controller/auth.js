@@ -24,7 +24,7 @@ module.exports.authUsers = async (req, resp, next) => {
   if (!validPassword) {
     return next(400);
   }
-  let tokenAuth;
+
   jwt.sign(
     {
       uid: validUsuario._id,
@@ -37,8 +37,8 @@ module.exports.authUsers = async (req, resp, next) => {
     },
     (err, token) => {
       if (err) console.error(err);
-      tokenAuth = token;
+      return resp.json({ token });
     },
   );
-  return resp.json({ tokenAuth });
+
 };

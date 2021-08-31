@@ -7,16 +7,14 @@ const { isAdmin } = require('../middleware/auth');
 
 // ---------------------CREANDO ADMIN---------------------------
 const postAdminUser = async (adminUser, next) => {
-
-  const userFind = await User.findOne({ email: adminUser.email });
-
   try {
+    const userFind = await User.findOne({ email: adminUser.email });
     if (userFind !== null) {
       return next(200);
     }
 
     const newUser = new User(adminUser);
-    newUser.save();
+    await newUser.save();
     console.info('El usuario ha sido creado');
 
   } catch (error) {
@@ -80,9 +78,7 @@ const postUsers = async (req, resp, next) => {
   try {
     const { email, password, roles } = req.body;
     const user = new User({ email, password, roles });
-
     if (!email || !password) return next(400);
-
     if (!isValidEmail(email)) return next(400);
 
     if (password.length < 4) return next(400);
