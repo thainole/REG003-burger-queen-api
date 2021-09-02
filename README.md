@@ -113,5 +113,6 @@ Al finalizar el proyecto, los tests - tanto end-to-end como las pruebas unitaria
 Desplegamos nuestra aplicación en Heroku, la cual está relacionada a una base de Datos en MongoDB Atlas. 
 
 El link de nuestra API es el siguiente: 
-https://dashboard.heroku.com/apps/reg003-bq-api
+https://reg003-bq-api.herokuapp.com/
+
 
