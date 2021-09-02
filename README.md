@@ -1,6 +1,6 @@
 # Burger Queen - API con Node.js
 
-![Banner Merimaithai](https://lh3.googleusercontent.com/iSa5I3Cwle7oKMr8A4woyXqBsUq7bVgL3TscdLmF2NGkWWa2qqmb45S6ykxvguv6-rZfm746hYK5HApxAb10GUHSjZ75ncZ7KWTTAhnNTPkaSTsJPAsNTViGiNnEtiUEpdkiiXwkzTyIfE_rPVpWz01cw7KYR7TfkzSPYScQZOgSYw0zS9sgmgV5Fv6f7TuORyKOylrrktx1dvKMk6ULXvIPMgN_QcZhcW7xa2gqNpVS0c8xFafoJVYYLOQ3jelWdbH0llCWZ-1xGHIgpJ4YHocPfGwBOY2WKXnKxp7O3ceZAMWnnI3BOh--w4Axn_yUcX5S8CnvqH2wlKMJJNqsT1D-n8yWC6Moam9bEU7qRzo9wOgQmfkqVRedfWEuC-oP0VC85_kfWvDFO6WqwaEx6U7n-VFOC5VxzgfxBzf0W4H_iBIME1tPpMcZKDRXRn6bm-hvYgdqml2oMZVIEJO3jpgK6lF3yvjDoQ7gOTeArZIp7EJpaVxp_MAt2-stXfHlTYpXk3EX3r_cOpN4srYvsIV0K-S7mlaMJaw2rOlS6oRVrPbk4S7EYMfFRPBG3AOUZ1A8_HBwDPYwsKE9VYDAQc_h3EV6MrVuJazmqzjN1z6GXJdYrfraj2-2eiJ3PQ2K8CvTeXdAYzj_z4CJyfoDWVl2_YYlb4hV0UoW-pRW4jGiU6XJ7BTA1YYJ_HPSofEwYzUe6RtA6aAQ5WDbpUN3EheB=w1695-h621-no?authuser=0)
+![Banner Merimaithai](https://i.pinimg.com/564x/0b/af/7c/0baf7cf5524b6da33d9d5173f36fdad0.jpg)
 
 ## Índice
 
@@ -39,7 +39,7 @@ Según lo establecido por la documentación, la _API_ debe exponer los siguiente
 * `GET /`
 * `POST /auth`
 
-![home-and-auth](https://cutt.ly/TWilL9S)
+![home-and-auth](https://i.pinimg.com/564x/c3/04/1a/c3041a3df1c57e808f4b907464cedf9a.jpg)
 
 
 #### `/users`
@@ -50,7 +50,7 @@ Según lo establecido por la documentación, la _API_ debe exponer los siguiente
 * `PUT /users/:uid`
 * `DELETE /users/:uid`
 
-![users](https://cutt.ly/vWil14T)
+![users](https://i.pinimg.com/564x/7f/b6/35/7fb63575195989a0a8521d5288e6d70d.jpg)
 
 
 #### `/products`
@@ -61,7 +61,7 @@ Según lo establecido por la documentación, la _API_ debe exponer los siguiente
 * `PUT /products/:productid`
 * `DELETE /products/:productid`
 
-![products](https://cutt.ly/7Wil8jJ)
+![products](https://i.pinimg.com/564x/c7/7f/f3/c77ff318b539696ecc918609eefa4e2c.jpg)
 
 
 #### `/orders`
@@ -72,7 +72,7 @@ Según lo establecido por la documentación, la _API_ debe exponer los siguiente
 * `PUT /orders/:orderId`
 * `DELETE /orders/:orderId`
 
-![orders](https://cutt.ly/XWil7Td)
+![orders](https://i.pinimg.com/564x/0d/12/3c/0d123c9247a1fb067da466d6cc2c113c.jpg)
 
 
 ### 2.2. CLI
@@ -93,10 +93,10 @@ npm start 8888
 Nuestra aplicación usa las siguientes variables de entorno:
 
 * `PORT`: Si no se ha especificado un puerto como argumento de lína de comando, podemos usar la variable de entorno `PORT` para especificar el puerto. Valor  por defecto `8080`.
-* `DB_URL`: El _string_ de conexión de _MongoDB_. Cuando ejecutemos la  aplicación en nuestra computadora (en entorno de desarrollo), podemos usar una base de datos local, pero en producción deberemos utilizar las instancias configuradas con `docker-compose` (mas sobre esto en la siguiente sección de **Deployment**)
+* `DB_URL`: El _string_ de conexión de _MongoDB_. Cuando ejecutemos la  aplicación en nuestra computadora (en entorno de desarrollo), podemos usar una base de datos local (configurada con `docker-compose` en nuestro caso).
 * `JWT_SECRET`: Nuestra aplicación implementa autenticación usando JWT (JSON Web Tokens). Para poder firmar (cifrar) y verificar (descifrar) los tokens, nuestra aplicación necesita un secreto. 
-* `ADMIN_EMAIL`: Opcionalmente podemos especificar un email y password para el usuario admin (root). Si estos detalles están presentes la aplicación se asegurará que exista el usuario y que tenga permisos de administrador. Valor por defecto `admin@localhost`.
-* `ADMIN_PASSWORD`: Si hemos especificado un `ADMIN_EMAIL`, debemos pasar también una contraseña para el usuario admin. Valor por defecto: `changeme`.
+* `ADMIN_EMAIL`: Correo del administrador creado por defecto. El valor por defecto es `admin@localhost`.
+* `ADMIN_PASSWORD`: Si hemos especificado un `ADMIN_EMAIL`, debemos pasar también una contraseña para el usuario admin. El valor por defecto es `changeme`.
 
 
 
@@ -104,13 +104,14 @@ Nuestra aplicación usa las siguientes variables de entorno:
 
 Al finalizar el proyecto, los tests - tanto end-to-end como las pruebas unitarias - superaron el mínimo del 90% de _statements_, _functions_, _lines_ y _branches_. 
 
-![tests](https://cutt.ly/TWizenx)
+![tests](https://i.pinimg.com/564x/c7/07/65/c70765770690d3221d36b6eafd0cb5b3.jpg)
 
 
 
 ## 4. Despliegue
 
-Nuestra clienta nos ha manifestado que su equipo de _devops_ está siempre con
-muchas tareas, por por lo que nos pide como requerimiento que la aplicación esté
-configurada con `docker-compose` para que pueda ser desplegada sin dificultades
-en cualquier entorno.
+Desplegamos nuestra aplicación en Heroku, la cual está relacionada a una base de Datos en MongoDB Atlas. 
+
+El link de nuestra API es el siguiente: 
+https://dashboard.heroku.com/apps/reg003-bq-api
+
