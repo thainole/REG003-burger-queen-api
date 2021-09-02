@@ -21,9 +21,9 @@ services:
   # https://hub.docker.com/_/mysql
 
   node:
-    image: merymaithai # https://hub.docker.com/_/node/
-#    user: node
-#   working_dir: /home/node/app
+    image: node:14  #merymaithai https://hub.docker.com/_/node/
+    user: node
+    working_dir: /home/node/app
     environment:
       NODE_ENV: production
       PORT: 8080
