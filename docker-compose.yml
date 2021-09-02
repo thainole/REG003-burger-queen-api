@@ -1,6 +1,7 @@
 version: "3"
 services:
   db:
+  # DONE: configura tu imagen de base de datos, te recomendamos una de estas:
     image: mongo:4
     volumes:
       - ./db-data:/data/db
@@ -20,7 +21,7 @@ services:
   # https://hub.docker.com/_/mysql
 
   # node:
-  #   image: node:14  #merymaithai https://hub.docker.com/_/node/
+  #   image: node:14  # https://hub.docker.com/_/node/
   #   user: node
   #   working_dir: /home/node/app
   #   environment:
@@ -35,10 +36,10 @@ services:
   #   expose:
   #     - 8080 # nuestra app corre en el puerto 8080
   #   ports:
-  #   # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra
-      # máquina
+  #     # mapeamos el puerto 8080 de nuestro contenedor al puerto 80 de nuestra
+  #     # máquina
   #     - 80:8080
-    # reinstalamos las dependencias y levantamos el servidor
+  #   # reinstalamos las dependencias y levantamos el servidor
   #   command: bash -c 'rm -rf node_modules && npm install && npm start'
   #   depends_on:
   #     - db
