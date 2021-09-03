@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 const nodeFetch = require('node-fetch');
 const kill = require('tree-kill');
 const setUp = require('@shelf/jest-mongodb/setup');
-
+require('dotenv').config();
 const config = require('../config');
 
 const port = process.env.PORT || 8888;

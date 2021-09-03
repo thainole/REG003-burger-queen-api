@@ -11,6 +11,7 @@
     "no-unused-vars": "off",
     "no-trailing-spaces": "off",
     "no-multiple-empty-lines": "off",
+    "no-nested-ternary": "off",
     "max-len": "off",
     "comma-dangle": "off",
     "padded-blocks": "off",

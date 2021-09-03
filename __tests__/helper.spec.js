@@ -1,4 +1,4 @@
-const { isValidEmail, pagination } = require('../helpers/helper');
+const { isValidEmail, isValidMongoId, pagination } = require('../helpers/helper');
 
 describe('is valid email', () => {
   it('should be true', () => {
@@ -8,6 +8,17 @@ describe('is valid email', () => {
     expect(isValidEmail('test')).toBeFalsy();
   });
 });
+
+describe('isValidMongoId', () => {
+  it('Should be true', () => {
+    expect(isValidMongoId('612428a85681fb1da7651c2c')).toBeTruthy();
+  });
+  it('Should be false', () => {
+    expect(isValidMongoId('holisss')).toBeFalsy();
+  });
+});
+
+
 describe('generate a link to pagination', () => {
   const resp = {
     hasPrevPage: false,
