@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
-const { isValidMongoId } = require('../middleware/products');
 const { isValidEmail, pagination } = require('../helpers/helper');
 const { isAdmin } = require('../middleware/auth');
 
@@ -127,12 +126,10 @@ const updateUser = async (req, resp, next) => {
 
   try {
     const { uid } = req.params;
-    // eslint-disable-next-line no-nested-ternary
+
     const userById = isValidEmail(uid)
       ? await User.findOne({ email: uid })
-      : isValidMongoId(uid)
-        ? await User.findById(uid)
-        : '';
+      : await User.findById(uid);
     if (!userById) return next(404);
 
     const { email, password, roles } = req.body;

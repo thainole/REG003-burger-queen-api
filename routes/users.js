@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 
-const { requireAuth, requireAdmin, requireUser } = require('../middleware/auth');
+const { requireAdmin, requireUser } = require('../middleware/auth');
+const { validUserId } = require('../middleware/user');
 
 const {
   getUserId,
@@ -97,7 +98,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.get('/users/:uid', requireUser, getUserId);
+  app.get('/users/:uid', [requireUser, validUserId], getUserId);
 
   /**
    * @name POST /users
@@ -142,7 +143,7 @@ module.exports = (app, next) => {
    * @code {403} una usuaria no admin intenta de modificar sus `roles`
    * @code {404} si la usuaria solicitada no existe
    */
-  app.put('/users/:uid', requireUser, updateUser);
+  app.put('/users/:uid', [requireUser, validUserId], updateUser);
 
   /**
    * @name DELETE /users
@@ -160,7 +161,7 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin o la misma usuaria
    * @code {404} si la usuaria solicitada no existe
    */
-  app.delete('/users/:uid', requireUser, deleteUser);
+  app.delete('/users/:uid', [requireUser, validUserId], deleteUser);
 
   initAdminUser(app, next);
 };

@@ -1,4 +1,4 @@
-const { isValidMongoId } = require('./orders');
+const { isValidMongoId } = require('../helpers/helper');
 
 module.exports.validProductId = (req, resp, next) => (
   (!isValidMongoId(req.params.productId))
